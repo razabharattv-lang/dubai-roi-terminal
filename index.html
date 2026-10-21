@@ -25,16 +25,17 @@
       border-radius: 16px;
       box-shadow: inset 3px 3px 6px #cbd5e1, inset -3px -3px 6px #ffffff;
     }
-    .clay-pill {
-      background: #FFFFFF;
-      box-shadow: 4px 4px 10px #cbd5e1, -4px -4px 10px #ffffff;
-      transition: all 0.15s ease-in-out;
-    }
-    .clay-pill:active { transform: scale(0.97); }
-    .clay-pill-active {
-      background: #2563EB !important;
+    /* Dynamic Active / Inactive Button States */
+    .btn-active {
+      background-color: #2563EB !important;
       color: #FFFFFF !important;
       box-shadow: inset 2px 2px 5px rgba(0,0,0,0.25) !important;
+      transform: scale(0.98);
+    }
+    .btn-inactive {
+      background-color: #FFFFFF !important;
+      color: #334155 !important;
+      box-shadow: 3px 3px 8px #cbd5e1, -3px -3px 8px #ffffff !important;
     }
     .clay-btn-gold {
       background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
@@ -69,58 +70,58 @@
     </div>
     
     <div class="flex items-center gap-2">
-      <button onclick="resetDefaults()" title="Reset Calculator" class="w-8 h-8 clay-surface rounded-xl flex items-center justify-center text-xs font-bold text-slate-600 active:scale-95 transition">
+      <button onclick="resetDefaults()" title="Reset All" class="w-8 h-8 clay-surface rounded-xl flex items-center justify-center text-xs font-bold text-slate-600 active:scale-95 transition">
         ↺
       </button>
     </div>
   </header>
 
-  <!-- Global Tier-1 Currency Switcher -->
+  <!-- Global Currency Selector -->
   <section class="clay-surface p-2.5 mb-4">
     <div class="flex items-center justify-between text-xs font-bold px-1 mb-1.5">
       <span class="text-[10px] font-extrabold uppercase tracking-wide text-slate-500">Global Settlement Currency</span>
       <span id="rate-badge" class="text-[10px] text-blue-600 font-semibold">1 USD = 3.6725 AED (Pegged)</span>
     </div>
-    <div class="grid grid-cols-4 gap-1.5">
-      <button id="curr-usd" onclick="setCurrency('USD')" class="clay-pill py-2 rounded-xl text-center text-xs font-bold clay-pill-active transition">
+    <div class="grid grid-cols-4 gap-1.5" id="currency-group">
+      <button onclick="setCurrency('USD')" class="curr-btn py-2 rounded-xl text-center text-xs font-bold transition btn-active" data-curr="USD">
         🇺🇸 USD ($)
       </button>
-      <button id="curr-gbp" onclick="setCurrency('GBP')" class="clay-pill py-2 rounded-xl text-center text-xs font-bold text-slate-700 transition">
+      <button onclick="setCurrency('GBP')" class="curr-btn py-2 rounded-xl text-center text-xs font-bold transition btn-inactive" data-curr="GBP">
         🇬🇧 GBP (£)
       </button>
-      <button id="curr-eur" onclick="setCurrency('EUR')" class="clay-pill py-2 rounded-xl text-center text-xs font-bold text-slate-700 transition">
+      <button onclick="setCurrency('EUR')" class="curr-btn py-2 rounded-xl text-center text-xs font-bold transition btn-inactive" data-curr="EUR">
         🇪🇺 EUR (€)
       </button>
-      <button id="curr-aed" onclick="setCurrency('AED')" class="clay-pill py-2 rounded-xl text-center text-xs font-bold text-slate-700 transition">
+      <button onclick="setCurrency('AED')" class="curr-btn py-2 rounded-xl text-center text-xs font-bold transition btn-inactive" data-curr="AED">
         🇦🇪 AED
       </button>
     </div>
   </section>
 
-  <!-- 1. Master Developer Selector -->
+  <!-- 1. Master Developer Selection -->
   <section class="clay-surface p-4 mb-4">
     <div class="flex justify-between items-center mb-2.5">
       <span class="text-xs font-extrabold uppercase tracking-wide text-slate-800">1. Developer Brand & Inventory</span>
       <span id="dev-tag" class="text-[10px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full">Fast-Track Delivery</span>
     </div>
     
-    <div class="grid grid-cols-3 gap-2 text-xs font-bold mb-3">
-      <button onclick="selectDeveloper('Binghatti', 1150000, 'Business Bay', 8.8, '1pct', this)" class="dev-btn clay-pill clay-pill-active p-2 rounded-xl text-center">
+    <div class="grid grid-cols-3 gap-2 text-xs font-bold mb-3" id="dev-group">
+      <button onclick="selectDeveloper('Binghatti')" class="dev-btn p-2 rounded-xl text-center transition btn-active" data-dev="Binghatti">
         ⚡ Binghatti
       </button>
-      <button onclick="selectDeveloper('Emaar', 2450000, 'Downtown / Creek', 7.2, 'milestone', this)" class="dev-btn clay-pill p-2 rounded-xl text-center">
+      <button onclick="selectDeveloper('Emaar')" class="dev-btn p-2 rounded-xl text-center transition btn-inactive" data-dev="Emaar">
         🏢 Emaar
       </button>
-      <button onclick="selectDeveloper('Sobha', 1850000, 'Sobha Hartland', 7.9, 'milestone', this)" class="dev-btn clay-pill p-2 rounded-xl text-center">
+      <button onclick="selectDeveloper('Sobha')" class="dev-btn p-2 rounded-xl text-center transition btn-inactive" data-dev="Sobha">
         💎 Sobha
       </button>
-      <button onclick="selectDeveloper('Danube', 890000, 'JVC High-Yield', 9.3, '1pct', this)" class="dev-btn clay-pill p-2 rounded-xl text-center">
+      <button onclick="selectDeveloper('Danube')" class="dev-btn p-2 rounded-xl text-center transition btn-inactive" data-dev="Danube">
         🪙 Danube (1%)
       </button>
-      <button onclick="selectDeveloper('Damac', 1950000, 'Damac Lagoons', 7.8, 'milestone', this)" class="dev-btn clay-pill p-2 rounded-xl text-center">
+      <button onclick="selectDeveloper('Damac')" class="dev-btn p-2 rounded-xl text-center transition btn-inactive" data-dev="Damac">
         👑 Damac
       </button>
-      <button onclick="selectDeveloper('Ultra Luxury', 4500000, 'Palm Jumeirah', 6.9, 'phpp', this)" class="dev-btn clay-pill p-2 rounded-xl text-center">
+      <button onclick="selectDeveloper('Sky Villa')" class="dev-btn p-2 rounded-xl text-center transition btn-inactive" data-dev="Sky Villa">
         🏖️ Sky Villa
       </button>
     </div>
@@ -156,23 +157,23 @@
     </div>
   </section>
 
-  <!-- 3. Target Location -->
+  <!-- 3. Target Prime Location -->
   <section class="mb-4">
     <div class="flex justify-between items-center mb-2 px-1">
       <span class="text-xs font-extrabold uppercase tracking-wide text-slate-700">2. Prime Location</span>
       <span id="selected-loc-label" class="text-[10px] text-blue-600 font-bold">Business Bay</span>
     </div>
-    <div class="flex gap-2 overflow-x-auto pb-1 no-scrollbar text-xs">
-      <button onclick="setArea('Business Bay', 8.8, this)" class="area-btn clay-pill clay-pill-active px-3.5 py-2 rounded-2xl font-bold whitespace-nowrap">Business Bay</button>
-      <button onclick="setArea('Downtown Dubai', 7.2, this)" class="area-btn clay-pill px-3.5 py-2 rounded-2xl font-bold whitespace-nowrap text-slate-700">Downtown</button>
-      <button onclick="setArea('Dubai Marina', 7.7, this)" class="area-btn clay-pill px-3.5 py-2 rounded-2xl font-bold whitespace-nowrap text-slate-700">Dubai Marina</button>
-      <button onclick="setArea('Jumeirah Village Circle (JVC)', 9.3, this)" class="area-btn clay-pill px-3.5 py-2 rounded-2xl font-bold whitespace-nowrap text-slate-700">JVC</button>
-      <button onclick="setArea('Sobha Hartland', 7.9, this)" class="area-btn clay-pill px-3.5 py-2 rounded-2xl font-bold whitespace-nowrap text-slate-700">Sobha Hartland</button>
-      <button onclick="setArea('Palm Jumeirah', 6.9, this)" class="area-btn clay-pill px-3.5 py-2 rounded-2xl font-bold whitespace-nowrap text-slate-700">Palm Jumeirah</button>
+    <div class="flex gap-2 overflow-x-auto pb-1 no-scrollbar text-xs" id="area-group">
+      <button onclick="selectArea('Business Bay')" class="area-btn px-3.5 py-2 rounded-2xl font-bold whitespace-nowrap transition btn-active" data-area="Business Bay">Business Bay</button>
+      <button onclick="selectArea('Downtown Dubai')" class="area-btn px-3.5 py-2 rounded-2xl font-bold whitespace-nowrap transition btn-inactive" data-area="Downtown Dubai">Downtown</button>
+      <button onclick="selectArea('Dubai Marina')" class="area-btn px-3.5 py-2 rounded-2xl font-bold whitespace-nowrap transition btn-inactive" data-area="Dubai Marina">Dubai Marina</button>
+      <button onclick="selectArea('JVC')" class="area-btn px-3.5 py-2 rounded-2xl font-bold whitespace-nowrap transition btn-inactive" data-area="JVC">JVC (Max Yield)</button>
+      <button onclick="selectArea('Sobha Hartland')" class="area-btn px-3.5 py-2 rounded-2xl font-bold whitespace-nowrap transition btn-inactive" data-area="Sobha Hartland">Sobha Hartland</button>
+      <button onclick="selectArea('Palm Jumeirah')" class="area-btn px-3.5 py-2 rounded-2xl font-bold whitespace-nowrap transition btn-inactive" data-area="Palm Jumeirah">Palm Jumeirah</button>
     </div>
   </section>
 
-  <!-- 4. Budget Entry -->
+  <!-- 4. Budget Entry (Slider & Input) -->
   <section class="clay-surface p-5 mb-4">
     <div class="flex justify-between items-center mb-2">
       <span class="text-xs font-extrabold uppercase tracking-wide text-slate-700">3. Acquisition Budget</span>
@@ -185,7 +186,6 @@
         type="number"
         id="price-input"
         value="313145"
-        oninput="handleManualInput(this.value)"
         class="clay-input w-full pl-10 pr-4 py-3 rounded-2xl text-base font-extrabold text-slate-800"
       />
     </div>
@@ -193,11 +193,10 @@
     <input
       type="range"
       id="price-slider"
-      min="150000"
+      min="100000"
       max="3000000"
       step="10000"
       value="313145"
-      oninput="handleSliderInput(this.value)"
       class="w-full h-2.5 bg-slate-200 rounded-lg cursor-pointer mb-3"
     />
 
@@ -217,16 +216,16 @@
       <span class="text-[10px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full font-bold">Law No. 8 Escrow Protected</span>
     </div>
 
-    <div class="grid grid-cols-3 gap-1.5 p-1 clay-inset rounded-2xl mb-4 text-[11px] font-bold">
-      <button id="plan-btn-1" onclick="setPlan('1pct')" class="py-2 rounded-xl clay-pill-active transition">1% Monthly</button>
-      <button id="plan-btn-2" onclick="setPlan('milestone')" class="py-2 rounded-xl text-slate-500 transition">60/40 Plan</button>
-      <button id="plan-btn-3" onclick="setPlan('phpp')" class="py-2 rounded-xl text-slate-500 transition">Post-Handover</button>
+    <div class="grid grid-cols-3 gap-1.5 p-1 clay-inset rounded-2xl mb-4 text-[11px] font-bold" id="plan-group">
+      <button onclick="selectPlan('1pct')" class="plan-btn py-2 rounded-xl transition btn-active" data-plan="1pct">1% Monthly</button>
+      <button onclick="selectPlan('milestone')" class="plan-btn py-2 rounded-xl transition btn-inactive" data-plan="milestone">60/40 Plan</button>
+      <button onclick="selectPlan('phpp')" class="plan-btn py-2 rounded-xl transition btn-inactive" data-plan="phpp">Post-Handover</button>
     </div>
 
     <div class="space-y-2 text-xs" id="schedule-container"></div>
   </section>
 
-  <!-- 6. Instant Institutional Actions -->
+  <!-- 6. Instant Actions -->
   <section class="space-y-2.5 mb-4">
     <button onclick="copyExecutiveMemo()" class="clay-surface w-full py-4 px-3 rounded-2xl text-xs font-extrabold text-blue-700 flex items-center justify-center gap-2 active:scale-95 transition border border-blue-200 bg-blue-50/50">
       <span>📑 Copy Institutional Client Memo</span>
@@ -243,13 +242,27 @@
   </div>
 
   <script>
-    const tg = window.Telegram?.WebApp;
-    if (tg) {
-      tg.ready();
-      tg.expand();
+    // Safe Telegram WebApp initialization
+    try {
+      if (window.Telegram?.WebApp) {
+        window.Telegram.WebApp.ready();
+        window.Telegram.WebApp.expand();
+      }
+    } catch(e) {}
+
+    function triggerHaptic(type = 'light') {
+      try {
+        if (window.Telegram?.WebApp?.HapticFeedback) {
+          if (type === 'success' || type === 'warning' || type === 'error') {
+            window.Telegram.WebApp.HapticFeedback.notificationOccurred(type);
+          } else {
+            window.Telegram.WebApp.HapticFeedback.impactOccurred(type);
+          }
+        }
+      } catch(e) {}
     }
 
-    // Currencies conversion relative to 1 AED
+    // Currency Rates (Relative to 1 AED)
     const RATES = {
       AED: 1.0,
       USD: 0.2723,
@@ -264,144 +277,147 @@
       EUR: '€'
     };
 
-    let currency = 'USD';
+    // Developer Master Profiles
+    const DEVELOPERS = {
+      'Binghatti': { priceAED: 1150000, area: 'Business Bay', yield: 8.8, plan: '1pct', tag: 'Fast-Track Delivery', focus: '1% Monthly Cashflow Strategy' },
+      'Emaar': { priceAED: 2500000, area: 'Downtown Dubai', yield: 7.2, plan: 'milestone', tag: 'Global Tier-1 / Sovereign', focus: 'Highest Capital Growth & Iconic Landmarks' },
+      'Sobha': { priceAED: 1850000, area: 'Sobha Hartland', yield: 7.9, plan: 'milestone', tag: 'In-House Master Quality', focus: 'Lagoon Waterfront Luxury Suites' },
+      'Danube': { priceAED: 890000, area: 'JVC', yield: 9.3, plan: '1pct', tag: 'Official 1% Monthly Desk', focus: 'Fully Furnished Maximum Rental Yield' },
+      'Damac': { priceAED: 1950000, area: 'Dubai Marina', yield: 7.8, plan: 'milestone', tag: 'Branded Lifestyle Luxury', focus: 'Cavalli / de GRISOGONO Residences' },
+      'Sky Villa': { priceAED: 4500000, area: 'Palm Jumeirah', yield: 6.9, plan: 'phpp', tag: 'Ultra-Prime Trophy Assets', focus: 'Private Waterfront Sky Villas' }
+    };
+
+    // Location Benchmarks
+    const LOCATIONS = {
+      'Business Bay': { priceAED: 1500000, yield: 8.8 },
+      'Downtown Dubai': { priceAED: 2600000, yield: 7.2 },
+      'Dubai Marina': { priceAED: 1900000, yield: 7.7 },
+      'JVC': { priceAED: 900000, yield: 9.4 },
+      'Sobha Hartland': { priceAED: 1850000, yield: 7.9 },
+      'Palm Jumeirah': { priceAED: 4500000, yield: 6.9 }
+    };
+
+    // App State
+    let currentCurrency = 'USD';
     let currentDeveloper = 'Binghatti';
-    let baseAED = 1150000;
     let currentArea = 'Business Bay';
-    let currentYieldRate = 8.8;
     let currentPlan = '1pct';
+    let currentYield = 8.8;
+    let baseAED = 1150000;
 
     const priceInput = document.getElementById('price-input');
     const priceSlider = document.getElementById('price-slider');
 
-    function setCurrency(c) {
-      currency = c;
-      ['usd', 'gbp', 'eur', 'aed'].forEach(id => {
-        const btn = document.getElementById('curr-' + id);
-        if (id === c.toLowerCase()) {
-          btn.className = "clay-pill py-2 rounded-xl text-center text-xs font-bold clay-pill-active transition";
+    // UI Highlight Helper
+    function highlightGroup(selector, activeAttr, activeVal) {
+      document.querySelectorAll(selector).forEach(btn => {
+        if (btn.getAttribute(activeAttr) === activeVal) {
+          btn.classList.add('btn-active');
+          btn.classList.remove('btn-inactive');
         } else {
-          btn.className = "clay-pill py-2 rounded-xl text-center text-xs font-bold text-slate-700 transition";
+          btn.classList.remove('btn-active');
+          btn.classList.add('btn-inactive');
         }
       });
+    }
 
-      document.getElementById('input-curr-prefix').innerText = SYMBOLS[c];
+    // 1. Currency Switcher
+    function setCurrency(curr) {
+      currentCurrency = curr;
+      highlightGroup('.curr-btn', 'data-curr', curr);
+      document.getElementById('input-curr-prefix').innerText = SYMBOLS[curr];
 
       const rateBadge = document.getElementById('rate-badge');
-      if (c === 'USD') rateBadge.innerText = "1 USD = 3.6725 AED (Official Peg)";
-      else if (c === 'GBP') rateBadge.innerText = "1 GBP ≈ 4.75 AED (Strong FX Advantage)";
-      else if (c === 'EUR') rateBadge.innerText = "1 EUR ≈ 4.05 AED (High Real Yield)";
+      if (curr === 'USD') rateBadge.innerText = "1 USD = 3.6725 AED (Official Peg)";
+      else if (curr === 'GBP') rateBadge.innerText = "1 GBP ≈ 4.75 AED (Strong FX Advantage)";
+      else if (curr === 'EUR') rateBadge.innerText = "1 EUR ≈ 4.05 AED (High Real Yield)";
       else rateBadge.innerText = "Official UAE Dirham (Central Bank)";
 
-      syncInputs();
-      updateDisplay();
+      triggerHaptic('light');
+      syncSliderAndInput();
+      renderAll();
     }
 
-    function selectDeveloper(devName, startingAED, defaultArea, yieldRate, defaultPlan, btn) {
+    // 2. Developer Switcher
+    function selectDeveloper(devName) {
       currentDeveloper = devName;
-      baseAED = startingAED;
-      currentArea = defaultArea;
-      currentYieldRate = yieldRate;
-      currentPlan = defaultPlan;
+      const data = DEVELOPERS[devName];
+      baseAED = data.priceAED;
+      currentArea = data.area;
+      currentYield = data.yield;
+      currentPlan = data.plan;
 
-      document.querySelectorAll('.dev-btn').forEach(b => b.classList.remove('clay-pill-active'));
-      btn.classList.add('clay-pill-active');
+      highlightGroup('.dev-btn', 'data-dev', devName);
+      highlightGroup('.area-btn', 'data-area', currentArea);
+      highlightGroup('.plan-btn', 'data-plan', currentPlan);
 
-      const tag = document.getElementById('dev-tag');
-      const focusText = document.getElementById('dev-focus-text');
+      document.getElementById('dev-tag').innerText = data.tag;
+      document.getElementById('dev-focus-text').innerText = data.focus;
+      document.getElementById('selected-loc-label').innerText = currentArea;
 
-      if (devName === 'Emaar') {
-        tag.innerText = "Global Tier-1 / Sovereign";
-        focusText.innerText = "Highest Capital Growth & Iconic Landmarks";
-      } else if (devName === 'Sobha') {
-        tag.innerText = "In-House Master Quality";
-        focusText.innerText = "Lagoon Waterfront Luxury Suites";
-      } else if (devName === 'Binghatti') {
-        tag.innerText = "Fast-Track Architectural Icon";
-        focusText.innerText = "1% Monthly Cashflow Strategy";
-      } else if (devName === 'Danube') {
-        tag.innerText = "Official 1% Monthly Desk";
-        focusText.innerText = "Fully Furnished Maximum Rental Yield";
-      } else if (devName === 'Damac') {
-        tag.innerText = "Branded Lifestyle Real Estate";
-        focusText.innerText = "Cavalli / de GRISOGONO Themed Residences";
-      } else {
-        tag.innerText = "Ultra-Prime Trophy Assets";
-        focusText.innerText = "Private Waterfront Sky Villas";
-      }
-
-      setPlan(defaultPlan);
-      syncInputs();
-      if (tg?.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
-      updateDisplay();
+      triggerHaptic('medium');
+      syncSliderAndInput();
+      renderAll();
     }
 
-    function setArea(name, yieldRate, btn) {
-      currentArea = name;
-      currentYieldRate = yieldRate;
-      document.getElementById('selected-loc-label').innerText = name;
+    // 3. Location Switcher
+    function selectArea(areaName) {
+      currentArea = areaName;
+      const loc = LOCATIONS[areaName];
+      baseAED = loc.priceAED;
+      currentYield = loc.yield;
 
-      document.querySelectorAll('.area-btn').forEach(b => {
-        b.classList.remove('clay-pill-active');
-        b.classList.add('text-slate-700');
-      });
-      btn.classList.add('clay-pill-active');
-      btn.classList.remove('text-slate-700');
+      highlightGroup('.area-btn', 'data-area', areaName);
+      document.getElementById('selected-loc-label').innerText = areaName;
 
-      if (tg?.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
-      updateDisplay();
+      triggerHaptic('light');
+      syncSliderAndInput();
+      renderAll();
     }
 
-    function syncInputs() {
-      const convertedVal = Math.round(baseAED * RATES[currency]);
-      priceInput.value = convertedVal;
+    // 4. Plan Switcher
+    function selectPlan(planKey) {
+      currentPlan = planKey;
+      highlightGroup('.plan-btn', 'data-plan', planKey);
+      triggerHaptic('light');
+      renderAll();
+    }
 
-      const minConv = Math.round(500000 * RATES[currency]);
-      const maxConv = Math.round(15000000 * RATES[currency]);
+    // Slider & Input Sync
+    function syncSliderAndInput() {
+      const convPrice = Math.round(baseAED * RATES[currentCurrency]);
+      priceInput.value = convPrice;
+
+      const minConv = Math.round(500000 * RATES[currentCurrency]);
+      const maxConv = Math.round(15000000 * RATES[currentCurrency]);
       priceSlider.min = minConv;
       priceSlider.max = maxConv;
-      priceSlider.value = convertedVal;
+      priceSlider.value = convPrice;
     }
 
-    function handleSliderInput(val) {
-      const currentVal = Number(val);
-      baseAED = Math.round(currentVal / RATES[currency]);
-      priceInput.value = currentVal;
-      updateDisplay();
-    }
+    priceSlider.addEventListener('input', (e) => {
+      const val = Number(e.target.value);
+      baseAED = Math.round(val / RATES[currentCurrency]);
+      priceInput.value = val;
+      renderAll();
+    });
 
-    function handleManualInput(val) {
-      const currentVal = Math.max(10000, Number(val) || 0);
-      baseAED = Math.round(currentVal / RATES[currency]);
-      priceSlider.value = currentVal;
-      updateDisplay();
-    }
-
-    function setPlan(plan) {
-      currentPlan = plan;
-      const b1 = document.getElementById('plan-btn-1');
-      const b2 = document.getElementById('plan-btn-2');
-      const b3 = document.getElementById('plan-btn-3');
-
-      [b1, b2, b3].forEach(b => b.className = "py-2 rounded-xl text-slate-500 transition");
-      if (plan === '1pct') b1.className = "py-2 rounded-xl clay-pill-active transition";
-      if (plan === 'milestone') b2.className = "py-2 rounded-xl clay-pill-active transition";
-      if (plan === 'phpp') b3.className = "py-2 rounded-xl clay-pill-active transition";
-
-      updateDisplay();
-    }
+    priceInput.addEventListener('input', (e) => {
+      const val = Math.max(10000, Number(e.target.value) || 0);
+      baseAED = Math.round(val / RATES[currentCurrency]);
+      priceSlider.value = val;
+      renderAll();
+    });
 
     function formatSelected(aedAmount) {
-      const conv = Math.round(aedAmount * RATES[currency]);
-      if (currency === 'AED') {
-        return 'AED ' + conv.toLocaleString();
-      }
-      return SYMBOLS[currency] + conv.toLocaleString();
+      const conv = Math.round(aedAmount * RATES[currentCurrency]);
+      if (currentCurrency === 'AED') return 'AED ' + conv.toLocaleString();
+      return SYMBOLS[currentCurrency] + conv.toLocaleString();
     }
 
     function formatBoth(aedAmount) {
       const sel = formatSelected(aedAmount);
-      if (currency === 'AED') {
+      if (currentCurrency === 'AED') {
         const usdVal = '$' + Math.round(aedAmount * RATES.USD).toLocaleString();
         return `${sel} (${usdVal})`;
       } else {
@@ -417,8 +433,8 @@
       return "Ultra-Prime Sky Villa / Penthouse";
     }
 
-    function updateDisplay() {
-      const annualRent = baseAED * (currentYieldRate / 100);
+    function renderAll() {
+      const annualRent = baseAED * (currentYield / 100);
       const serviceCharge = baseAED * 0.011;
       const netRent = Math.max(0, annualRent - serviceCharge);
       const netYield = ((netRent / baseAED) * 100).toFixed(2);
@@ -428,6 +444,7 @@
       document.getElementById('net-rent-val').innerText = formatSelected(netRent);
       document.getElementById('total-growth-val').innerText = '+' + formatSelected(fiveYearGrowth);
 
+      // Golden Visa Badge
       const gvBox = document.getElementById('golden-visa-tag');
       if (baseAED >= 2000000) {
         gvBox.innerHTML = `
@@ -506,4 +523,100 @@
           </div>
           <div class="flex justify-between items-center p-2.5 rounded-xl bg-slate-50 border border-slate-100">
             <div><span class="font-bold text-slate-800">During Construction (30%)</span><p class="text-[10px] text-slate-400">Progressive installments</p></div>
-            <span class="font-extrab
+            <span class="font-extrabold text-slate-900">${formatSelected(duringBuild)}</span>
+          </div>
+          <div class="flex justify-between items-center p-2.5 rounded-xl bg-emerald-50/70 border border-emerald-100">
+            <div><span class="font-bold text-emerald-900">Post-Handover Plan (50%)</span><p class="text-[10px] text-emerald-600">Funded via rental yield over 36 months</p></div>
+            <span class="font-extrabold text-emerald-700">${formatSelected(postHandover)}</span>
+          </div>
+        `;
+      }
+    }
+
+    function copyExecutiveMemo() {
+      const annualRent = baseAED * (currentYield / 100);
+      const serviceCharge = baseAED * 0.011;
+      const netRent = Math.max(0, annualRent - serviceCharge);
+      const netYield = ((netRent / baseAED) * 100).toFixed(2);
+      const fiveYearGain = Math.round((baseAED * 0.35) + (netRent * 5));
+      const goldenVisaEligible = baseAED >= 2000000;
+
+      let planDetails = "";
+      if (currentPlan === '1pct') {
+        planDetails = `• Down Payment (20%): ${formatBoth(baseAED * 0.20)}
+• Monthly Cashflow (1%): ${formatBoth(baseAED * 0.01)} / Month (40 Months)
+• Completion Handover (40%): ${formatBoth(baseAED * 0.40)}
+• Govt DLD Registration (4%): ${formatBoth(baseAED * 0.04)}`;
+      } else if (currentPlan === 'milestone') {
+        planDetails = `• Down Payment (20%): ${formatBoth(baseAED * 0.20)}
+• Construction Milestones (40%): ${formatBoth(baseAED * 0.40)}
+• Completion Handover (40%): ${formatBoth(baseAED * 0.40)}`;
+      } else {
+        planDetails = `• Down Payment (20%): ${formatBoth(baseAED * 0.20)}
+• During Construction (30%): ${formatBoth(baseAED * 0.30)}
+• Post-Handover 3-Yr Plan (50%): ${formatBoth(baseAED * 0.50)} (Funded by Rental Yield)`;
+      }
+
+      const memo = `🏛️ DUBAI OFF-PLAN CAPITAL ALLOCATION MEMORANDUM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🏢 Developer / Brand: ${currentDeveloper}
+📍 Target Location: ${currentArea}, Dubai UAE
+🔑 Recommended Asset: ${getUnitName()}
+💰 Total Acquisition: ${formatBoth(baseAED)}
+💱 Settlement Currency: ${currentCurrency}
+
+📊 FINANCIAL PERFORMANCE BENCHMARK
+─────────────────────────────
+• Expected Net Yield (ROI): ${netYield}% / Year (100% Tax-Free)
+• Net Annual Rental Income: ${formatBoth(netRent)}
+• 5-Year Total Wealth Gain: +${formatBoth(fiveYearGain)}
+• UAE 10-Yr Golden Visa: ${goldenVisaEligible ? "✅ QUALIFIED (Full Family Residency Included)" : "❌ Need " + formatBoth(2000000 - baseAED) + " more"}
+
+💳 PAYMENT SCHEDULE (${currentPlan === '1pct' ? '1% Monthly Plan' : currentPlan === 'milestone' ? '60/40 Plan' : 'Post-Handover Plan'})
+─────────────────────────────
+${planDetails}
+
+🛡️ REGULATORY SAFEGUARDS & ADVANTAGES
+─────────────────────────────
+1. Escrow Protection: Governed under Dubai Law No. 8 of 2007 (Funds held in Central Bank Escrow).
+2. Tax Advantage: 0% Capital Gains Tax, 0% Rental Income Tax.
+3. Currency Security: AED is officially pegged to USD (1 USD = 3.6725 AED).
+4. Cross-Border Settlement: Legal Wire Transfer (USD/GBP/EUR) & USDT / BTC escrow settlement supported.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Generated via Dubai Capital Institutional Desk
+Private & Confidential — For Qualified Investor Review Only.`;
+
+      navigator.clipboard.writeText(memo);
+      triggerHaptic('success');
+      alert("Institutional Client Memorandum copied in " + currentCurrency + "!");
+    }
+
+    function resetDefaults() {
+      selectDeveloper('Binghatti');
+      setCurrency('USD');
+      document.getElementById('cta-container').innerHTML = `
+        <button onclick="submitRequest()" class="clay-btn-gold w-full py-4 px-4 font-extrabold text-sm rounded-2xl flex items-center justify-center gap-2">
+          <span>⚡ Request Verified Allocation & Dossier</span>
+        </button>
+      `;
+      triggerHaptic('warning');
+    }
+
+    function submitRequest() {
+      triggerHaptic('success');
+      document.getElementById('cta-container').innerHTML = `
+        <div class="clay-surface p-3.5 text-center border border-emerald-300">
+          <p class="text-xs font-extrabold text-emerald-700">✓ Allocation Request Logged (${currentCurrency})</p>
+          <p class="text-[10px] text-slate-500 mt-0.5">${currentDeveloper} matching dossier locked to your private session.</p>
+          <button onclick="resetDefaults()" class="mt-2 text-xs font-extrabold text-blue-600 underline">↺ Adjust / Select Another Developer</button>
+        </div>
+      `;
+    }
+
+    // Initialize defaults on page load
+    syncSliderAndInput();
+    renderAll();
+  </script>
+</body>
+</html>
