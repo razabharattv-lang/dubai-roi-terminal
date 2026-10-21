@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Dubai Capital Terminal — Institutional Deal Desk</title>
+  <title>YIELDEX — Institutional Capital Terminal</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -57,15 +57,15 @@
 </head>
 <body class="min-h-screen pb-36 px-4 pt-3 max-w-lg mx-auto">
 
-  <!-- Header -->
+  <!-- Header Bar -->
   <header class="flex items-center justify-between py-2 mb-3">
     <div class="flex items-center gap-3">
-      <div class="w-11 h-11 clay-surface rounded-2xl flex items-center justify-center text-xl">
-        🏛️
+      <div class="w-11 h-11 clay-surface rounded-2xl flex items-center justify-center text-xl font-extrabold text-blue-600">
+        ⚡
       </div>
       <div>
-        <h1 class="text-sm font-extrabold text-slate-900 tracking-tight leading-none">DUBAI CAPITAL</h1>
-        <span class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Institutional Memo Generator</span>
+        <h1 class="text-base font-extrabold text-slate-900 tracking-tight leading-none">YIELDEX</h1>
+        <span class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Institutional Capital Terminal</span>
       </div>
     </div>
     
@@ -76,7 +76,7 @@
     </div>
   </header>
 
-  <!-- Currency Switcher -->
+  <!-- Settlement Currency -->
   <section class="clay-surface p-2.5 mb-4">
     <div class="flex items-center justify-between text-xs font-bold px-1 mb-1.5">
       <span class="text-[10px] font-extrabold uppercase tracking-wide text-slate-500">Settlement Currency</span>
@@ -98,31 +98,31 @@
     </div>
   </section>
 
-  <!-- Memo Agency / Broker Branding Section -->
+  <!-- Agency / Advisor Branding Section -->
   <section class="clay-surface p-4 mb-4">
     <div class="flex justify-between items-center mb-2.5">
-      <span class="text-xs font-extrabold uppercase tracking-wide text-slate-800">Agency & Client Details</span>
-      <span class="text-[10px] text-blue-600 font-bold">Included in Memo</span>
+      <span class="text-xs font-extrabold uppercase tracking-wide text-slate-800">Agency & Deal Issuance</span>
+      <span class="text-[10px] text-blue-600 font-bold">Auto-Branded Memo</span>
     </div>
     <div class="space-y-2 text-xs">
       <div>
-        <label class="text-[10px] font-bold text-slate-500 uppercase">Agency / Brokerage Firm</label>
-        <input type="text" id="agency-name" value="Apex Luxury Real Estate Dubai" class="clay-input w-full px-3 py-2 rounded-xl font-bold text-slate-800 mt-0.5">
+        <label class="text-[10px] font-bold text-slate-500 uppercase">Brokerage / Advisory Desk</label>
+        <input type="text" id="agency-name" value="Apex Capital Partners" class="clay-input w-full px-3 py-2 rounded-xl font-bold text-slate-800 mt-0.5">
       </div>
       <div class="grid grid-cols-2 gap-2">
         <div>
-          <label class="text-[10px] font-bold text-slate-500 uppercase">Advisor Name</label>
-          <input type="text" id="advisor-name" value="Private Client Desk" class="clay-input w-full px-3 py-2 rounded-xl font-bold text-slate-800 mt-0.5">
+          <label class="text-[10px] font-bold text-slate-500 uppercase">Senior Advisor</label>
+          <input type="text" id="advisor-name" value="Wealth Advisory Desk" class="clay-input w-full px-3 py-2 rounded-xl font-bold text-slate-800 mt-0.5">
         </div>
         <div>
-          <label class="text-[10px] font-bold text-slate-500 uppercase">Client / Investor</label>
-          <input type="text" id="client-name" value="Valued Investor" class="clay-input w-full px-3 py-2 rounded-xl font-bold text-slate-800 mt-0.5">
+          <label class="text-[10px] font-bold text-slate-500 uppercase">Target Client</label>
+          <input type="text" id="client-name" value="Institutional Client" class="clay-input w-full px-3 py-2 rounded-xl font-bold text-slate-800 mt-0.5">
         </div>
       </div>
     </div>
   </section>
 
-  <!-- 1. Developer Selection -->
+  <!-- Developer Selection -->
   <section class="clay-surface p-4 mb-4">
     <div class="flex justify-between items-center mb-2.5">
       <span class="text-xs font-extrabold uppercase tracking-wide text-slate-800">1. Developer Brand & Inventory</span>
@@ -156,7 +156,7 @@
     </div>
   </section>
 
-  <!-- 2. Yield & Financial Showcase -->
+  <!-- Financial Metrics -->
   <section class="clay-surface p-5 mb-4">
     <div class="flex justify-between items-start">
       <div>
@@ -181,23 +181,23 @@
     </div>
   </section>
 
-  <!-- 3. Target Location -->
+  <!-- Location -->
   <section class="mb-4">
     <div class="flex justify-between items-center mb-2 px-1">
-      <span class="text-xs font-extrabold uppercase tracking-wide text-slate-700">2. Prime Location</span>
+      <span class="text-xs font-extrabold uppercase tracking-wide text-slate-700">2. Target Location</span>
       <span id="selected-loc-label" class="text-[10px] text-blue-600 font-bold">Business Bay</span>
     </div>
     <div class="flex gap-2 overflow-x-auto pb-1 no-scrollbar text-xs">
       <button onclick="selectArea('Business Bay')" class="area-btn px-3.5 py-2 rounded-2xl font-bold whitespace-nowrap transition btn-active" data-area="Business Bay">Business Bay</button>
       <button onclick="selectArea('Downtown Dubai')" class="area-btn px-3.5 py-2 rounded-2xl font-bold whitespace-nowrap transition btn-inactive" data-area="Downtown Dubai">Downtown</button>
       <button onclick="selectArea('Dubai Marina')" class="area-btn px-3.5 py-2 rounded-2xl font-bold whitespace-nowrap transition btn-inactive" data-area="Dubai Marina">Dubai Marina</button>
-      <button onclick="selectArea('JVC')" class="area-btn px-3.5 py-2 rounded-2xl font-bold whitespace-nowrap transition btn-inactive" data-area="JVC">JVC (Max Yield)</button>
+      <button onclick="selectArea('JVC')" class="area-btn px-3.5 py-2 rounded-2xl font-bold whitespace-nowrap transition btn-inactive" data-area="JVC">JVC</button>
       <button onclick="selectArea('Sobha Hartland')" class="area-btn px-3.5 py-2 rounded-2xl font-bold whitespace-nowrap transition btn-inactive" data-area="Sobha Hartland">Sobha Hartland</button>
       <button onclick="selectArea('Palm Jumeirah')" class="area-btn px-3.5 py-2 rounded-2xl font-bold whitespace-nowrap transition btn-inactive" data-area="Palm Jumeirah">Palm Jumeirah</button>
     </div>
   </section>
 
-  <!-- 4. Acquisition Budget -->
+  <!-- Acquisition Budget -->
   <section class="clay-surface p-5 mb-4">
     <div class="flex justify-between items-center mb-2">
       <span class="text-xs font-extrabold uppercase tracking-wide text-slate-700">3. Acquisition Budget</span>
@@ -233,21 +233,19 @@
     </div>
   </section>
 
-  <!-- 5. Fully Customizable Payment Plan & Incentives -->
+  <!-- Payment Structure & Discounts -->
   <section class="clay-surface p-5 mb-4">
     <div class="flex justify-between items-center mb-3">
-      <span class="text-xs font-extrabold uppercase tracking-wide text-slate-700">4. Payment Structure & Discounts</span>
-      <span class="text-[10px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full font-bold">Custom Editable</span>
+      <span class="text-xs font-extrabold uppercase tracking-wide text-slate-700">4. Payment Structure & Incentives</span>
+      <span class="text-[10px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full font-bold">Escrow Law Protected</span>
     </div>
 
-    <!-- Plan Templates -->
     <div class="grid grid-cols-3 gap-1.5 p-1 clay-inset rounded-2xl mb-4 text-[11px] font-bold">
       <button onclick="applyPresetPlan('1pct')" class="plan-btn py-2 rounded-xl transition btn-active" data-plan="1pct">1% Monthly</button>
       <button onclick="applyPresetPlan('milestone')" class="plan-btn py-2 rounded-xl transition btn-inactive" data-plan="milestone">60/40 Plan</button>
       <button onclick="applyPresetPlan('phpp')" class="plan-btn py-2 rounded-xl transition btn-inactive" data-plan="phpp">Post-Handover</button>
     </div>
 
-    <!-- Custom Editable Inputs: Discount & DLD Waiver -->
     <div class="grid grid-cols-2 gap-2.5 mb-3 text-xs">
       <div class="clay-inset p-2.5">
         <label class="text-[10px] font-bold text-slate-500 uppercase">Special Discount (%)</label>
@@ -266,36 +264,34 @@
       </div>
     </div>
 
-    <!-- Editable Milestone Percentages -->
     <div class="grid grid-cols-3 gap-2 mb-4 text-[11px]">
       <div class="clay-inset p-2 text-center">
         <span class="text-[9px] font-bold text-slate-400 uppercase">Down Pay %</span>
-        <input type="number" id="dp-pct-input" value="20" min="5" max="50" oninput="renderAll()" class="w-full text-center bg-white border border-slate-200 rounded-lg py-1 font-extrabold text-slate-800 mt-1 outline-none">
+        <input type="number" id="dp-pct-input" value="20" min="5" max="50" oninput="handleMilestoneChange('dp')" class="w-full text-center bg-white border border-slate-200 rounded-lg py-1 font-extrabold text-slate-800 mt-1 outline-none">
       </div>
       <div class="clay-inset p-2 text-center">
         <span class="text-[9px] font-bold text-slate-400 uppercase">During Build %</span>
-        <input type="number" id="during-pct-input" value="40" min="10" max="80" oninput="renderAll()" class="w-full text-center bg-white border border-slate-200 rounded-lg py-1 font-extrabold text-slate-800 mt-1 outline-none">
+        <input type="number" id="during-pct-input" value="40" min="10" max="80" oninput="handleMilestoneChange('during')" class="w-full text-center bg-white border border-slate-200 rounded-lg py-1 font-extrabold text-slate-800 mt-1 outline-none">
       </div>
       <div class="clay-inset p-2 text-center">
         <span class="text-[9px] font-bold text-slate-400 uppercase">Handover %</span>
-        <input type="number" id="handover-pct-input" value="40" min="10" max="80" oninput="renderAll()" class="w-full text-center bg-white border border-slate-200 rounded-lg py-1 font-extrabold text-slate-800 mt-1 outline-none">
+        <input type="number" id="handover-pct-input" value="40" min="10" max="80" oninput="handleMilestoneChange('handover')" class="w-full text-center bg-white border border-slate-200 rounded-lg py-1 font-extrabold text-slate-800 mt-1 outline-none">
       </div>
     </div>
 
-    <!-- Dynamic Live Breakdown -->
     <div class="space-y-2 text-xs" id="schedule-container"></div>
   </section>
 
-  <!-- Memo Preview & Result Modal (Hidden by Default) -->
+  <!-- Output Preview -->
   <div id="memo-output-box" class="clay-surface p-4 mb-5 hidden border-2 border-blue-500">
     <div class="flex items-center justify-between mb-2">
-      <span class="text-xs font-extrabold text-blue-700 uppercase">✓ Generated Institutional Memo</span>
+      <span class="text-xs font-extrabold text-blue-700 uppercase">✓ Generated YIELDEX Memo</span>
       <button onclick="copyGeneratedMemo()" class="text-[11px] font-bold bg-blue-600 text-white px-3 py-1 rounded-lg">Copy Memo</button>
     </div>
     <pre id="memo-text-preview" class="text-[10px] bg-slate-900 text-emerald-400 p-3 rounded-xl overflow-x-auto whitespace-pre-wrap font-mono"></pre>
   </div>
 
-  <!-- Sticky Bottom Bar: GENERATE MEMO -->
+  <!-- Sticky Bottom Button -->
   <div class="fixed bottom-0 left-0 right-0 p-3.5 bg-white/90 backdrop-blur-md border-t border-slate-200 z-50">
     <div class="max-w-lg mx-auto" id="cta-container">
       <button onclick="generateMemo()" class="clay-btn-blue w-full py-4 px-4 font-extrabold text-base rounded-2xl flex items-center justify-center gap-2">
@@ -440,6 +436,16 @@
       renderAll();
     }
 
+    function handleMilestoneChange(changedField) {
+      const dp = Number(document.getElementById('dp-pct-input').value) || 0;
+      const during = Number(document.getElementById('during-pct-input').value) || 0;
+      if (changedField !== 'handover') {
+        const remaining = Math.max(0, 100 - (dp + during));
+        document.getElementById('handover-pct-input').value = remaining;
+      }
+      renderAll();
+    }
+
     function syncSliderAndInput() {
       const convPrice = Math.round(baseAED * RATES[currentCurrency]);
       priceInput.value = convPrice;
@@ -560,7 +566,6 @@
       `;
     }
 
-    // THE FINAL MEMO GENERATOR
     function generateMemo() {
       const effectiveAED = getDiscountedBaseAED();
       const annualRent = effectiveAED * (currentYield / 100);
@@ -570,9 +575,9 @@
       const fiveYearGain = Math.round((effectiveAED * 0.35) + (netRent * 5));
       const goldenVisaEligible = effectiveAED >= 2000000;
 
-      const agency = document.getElementById('agency-name').value || "Apex Luxury Real Estate Dubai";
-      const advisor = document.getElementById('advisor-name').value || "Private Wealth Desk";
-      const client = document.getElementById('client-name').value || "Valued Investor";
+      const agency = document.getElementById('agency-name').value.trim() || "Apex Capital Partners";
+      const advisor = document.getElementById('advisor-name').value.trim() || "Wealth Advisory Desk";
+      const client = document.getElementById('client-name').value.trim() || "Institutional Client";
 
       const discountPct = Number(document.getElementById('custom-discount').value) || 0;
       const dpPct = Number(document.getElementById('dp-pct-input').value) || 20;
@@ -580,21 +585,21 @@
       const handoverPct = Number(document.getElementById('handover-pct-input').value) || 40;
       const dldPct = Number(document.getElementById('dld-waiver-select').value) || 0;
 
-      const memo = `🏛️ DUBAI CAPITAL ALLOCATION MEMORANDUM
+      const memo = `🏛️ YIELDEX CAPITAL ALLOCATION MEMORANDUM
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🏢 Issuing Agency: ${agency}
+🏢 Issuing Desk: ${agency}
 👤 Senior Advisor: ${advisor}
-🎯 Prepared For: ${client}
+🎯 Prepared Exclusively For: ${client}
 📅 Date: ${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-📍 ASSET & DEVELOPER SPECIFICATION
+📍 ASSET & INVENTORY PROFILE
 ─────────────────────────────
 • Developer Brand: ${currentDeveloper}
 • Target Prime Location: ${currentArea}, Dubai UAE
-• Asset Allocation: ${getUnitName()}
-• Original Price: ${formatBoth(baseAED)}
-${discountPct > 0 ? `• Exclusive Developer Incentive: ${discountPct}\% OFF (-${formatBoth(baseAED * (discountPct/100))})\n• Net Agreed Price: ${formatBoth(effectiveAED)}` : `• Net Agreed Price: ${formatBoth(effectiveAED)}`}
+• Allocation Tier: ${getUnitName()}
+• Base Valuation: ${formatBoth(baseAED)}
+${discountPct > 0 ? `• Institutional Incentive: ${discountPct}\% OFF (-${formatBoth(baseAED * (discountPct/100))})\n• Net Agreed Price: ${formatBoth(effectiveAED)}` : `• Net Agreed Price: ${formatBoth(effectiveAED)}`}
 • Settlement Currency: ${currentCurrency}
 
 📊 INSTITUTIONAL YIELD BENCHMARK
@@ -604,14 +609,14 @@ ${discountPct > 0 ? `• Exclusive Developer Incentive: ${discountPct}\% OFF (-$
 • 5-Year Capital & Rent Growth: +${formatBoth(fiveYearGain)}
 • UAE 10-Yr Golden Visa: ${goldenVisaEligible ? "✅ ELIGIBLE (Direct Full Family Residency)" : "❌ Needs " + formatBoth(2000000 - effectiveAED) + " to qualify"}
 
-💳 CUSTOM PAYMENT SCHEDULE
+💳 STRUCTURED PAYMENT SCHEDULE
 ─────────────────────────────
 • Down Payment (${dpPct}%): ${formatBoth(effectiveAED * (dpPct/100))}
 • During Construction (${duringPct}%): ${formatBoth(effectiveAED * (duringPct/100))} ${currentPlan === '1pct' ? '(1% Monthly Cashflow)' : ''}
 • Final Handover (${handoverPct}%): ${formatBoth(effectiveAED * (handoverPct/100))}
 • Dubai Land Dept (DLD ${dldPct}%): ${dldPct === 0 ? "100% WAIVED BY DEVELOPER (0 AED)" : formatBoth(effectiveAED * (dldPct/100))}
 
-🛡️ LEGAL SAFEGUARDS & GOVERNANCE
+🛡️ REGULATORY SAFEGUARDS & GOVERNANCE
 ─────────────────────────────
 1. Escrow Protection: Funds held strictly in Central Bank Escrow (Dubai Law No. 8).
 2. Taxation: 0% Capital Gains, 0% Corporate, 0% Income Tax.
@@ -619,25 +624,24 @@ ${discountPct > 0 ? `• Exclusive Developer Incentive: ${discountPct}\% OFF (-$
 4. Settlement Modes: Wire Transfer (USD/GBP/EUR) & Legal Crypto (USDT/BTC) supported.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Confidential Institutional Term Sheet — Prepared Exclusively for ${client}`;
+Generated via YIELDEX Institutional Terminal
+Confidential Term Sheet — For Investor Review Only.`;
 
-      // Show on-screen preview
       const previewBox = document.getElementById('memo-output-box');
       document.getElementById('memo-text-preview').innerText = memo;
       previewBox.classList.remove('hidden');
       previewBox.scrollIntoView({ behavior: 'smooth' });
 
-      // Automatically copy to clipboard
       navigator.clipboard.writeText(memo);
       triggerHaptic('success');
-      alert("✓ Official Memo Generated & Copied to Clipboard!");
+      alert("✓ YIELDEX Memorandum Generated & Copied to Clipboard!");
     }
 
     function copyGeneratedMemo() {
       const text = document.getElementById('memo-text-preview').innerText;
       navigator.clipboard.writeText(text);
       triggerHaptic('success');
-      alert("Memo re-copied to clipboard!");
+      alert("YIELDEX Memo re-copied to clipboard!");
     }
 
     function resetDefaults() {
@@ -649,7 +653,6 @@ Confidential Institutional Term Sheet — Prepared Exclusively for ${client}`;
       triggerHaptic('warning');
     }
 
-    // Init
     syncSliderAndInput();
     renderAll();
   </script>
