@@ -8,12 +8,14 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    * { -webkit-tap-highlight-color: transparent; }
+    * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
       background-color: #E8EDF4;
       color: #0f172a;
     }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     .clay-surface {
       background: #FFFFFF;
       border-radius: 24px;
@@ -51,11 +53,16 @@
       border: 1px solid #e2e8f0;
       outline: none;
     }
-    .clay-input:focus { border-color: #2563EB; }
+    .clay-input:focus { border-color: #2563EB; background: #FFFFFF; }
     input[type=range] { accent-color: #2563EB; }
   </style>
 </head>
 <body class="min-h-screen pb-36 px-4 pt-3 max-w-lg mx-auto">
+
+  <!-- Floating Notification Toast -->
+  <div id="toast-banner" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-slate-900 text-emerald-400 border border-emerald-500/40 px-4 py-2.5 rounded-2xl shadow-2xl text-xs font-extrabold tracking-wide transition-all duration-300 opacity-0 pointer-events-none">
+    ✓ Action Completed
+  </div>
 
   <!-- Header Bar -->
   <header class="flex items-center justify-between py-2 mb-3">
@@ -70,8 +77,8 @@
     </div>
     
     <div class="flex items-center gap-2">
-      <button onclick="resetDefaults()" title="Reset All" class="w-8 h-8 clay-surface rounded-xl flex items-center justify-center text-xs font-bold text-slate-600 active:scale-95 transition">
-        ↺
+      <button type="button" onclick="resetDefaults()" title="Reset All" class="px-3 h-8 clay-surface rounded-xl flex items-center justify-center gap-1 text-[11px] font-extrabold text-slate-600 active:scale-95 transition">
+        <span>↺</span> <span>Reset</span>
       </button>
     </div>
   </header>
@@ -80,19 +87,19 @@
   <section class="clay-surface p-2.5 mb-4">
     <div class="flex items-center justify-between text-xs font-bold px-1 mb-1.5">
       <span class="text-[10px] font-extrabold uppercase tracking-wide text-slate-500">Settlement Currency</span>
-      <span id="rate-badge" class="text-[10px] text-blue-600 font-semibold">1 USD = 3.6725 AED (Pegged)</span>
+      <span id="rate-badge" class="text-[10px] text-blue-600 font-semibold">1 USD = 3.6725 AED (Official Peg)</span>
     </div>
     <div class="grid grid-cols-4 gap-1.5">
-      <button onclick="setCurrency('USD')" class="curr-btn py-2 rounded-xl text-center text-xs font-bold transition btn-active" data-curr="USD">
+      <button type="button" onclick="setCurrency('USD')" class="curr-btn py-2 rounded-xl text-center text-xs font-bold transition btn-active" data-curr="USD">
         🇺🇸 USD ($)
       </button>
-      <button onclick="setCurrency('GBP')" class="curr-btn py-2 rounded-xl text-center text-xs font-bold transition btn-inactive" data-curr="GBP">
+      <button type="button" onclick="setCurrency('GBP')" class="curr-btn py-2 rounded-xl text-center text-xs font-bold transition btn-inactive" data-curr="GBP">
         🇬🇧 GBP (£)
       </button>
-      <button onclick="setCurrency('EUR')" class="curr-btn py-2 rounded-xl text-center text-xs font-bold transition btn-inactive" data-curr="EUR">
+      <button type="button" onclick="setCurrency('EUR')" class="curr-btn py-2 rounded-xl text-center text-xs font-bold transition btn-inactive" data-curr="EUR">
         🇪🇺 EUR (€)
       </button>
-      <button onclick="setCurrency('AED')" class="curr-btn py-2 rounded-xl text-center text-xs font-bold transition btn-inactive" data-curr="AED">
+      <button type="button" onclick="setCurrency('AED')" class="curr-btn py-2 rounded-xl text-center text-xs font-bold transition btn-inactive" data-curr="AED">
         🇦🇪 AED
       </button>
     </div>
@@ -107,16 +114,16 @@
     <div class="space-y-2 text-xs">
       <div>
         <label class="text-[10px] font-bold text-slate-500 uppercase">Brokerage / Advisory Desk</label>
-        <input type="text" id="agency-name" value="Apex Capital Partners" class="clay-input w-full px-3 py-2 rounded-xl font-bold text-slate-800 mt-0.5">
+        <input type="text" id="agency-name" value="Apex Capital Partners" oninput="renderAll()" class="clay-input w-full px-3 py-2 rounded-xl font-bold text-slate-800 mt-0.5">
       </div>
       <div class="grid grid-cols-2 gap-2">
         <div>
           <label class="text-[10px] font-bold text-slate-500 uppercase">Senior Advisor</label>
-          <input type="text" id="advisor-name" value="Wealth Advisory Desk" class="clay-input w-full px-3 py-2 rounded-xl font-bold text-slate-800 mt-0.5">
+          <input type="text" id="advisor-name" value="Wealth Advisory Desk" oninput="renderAll()" class="clay-input w-full px-3 py-2 rounded-xl font-bold text-slate-800 mt-0.5">
         </div>
         <div>
           <label class="text-[10px] font-bold text-slate-500 uppercase">Target Client</label>
-          <input type="text" id="client-name" value="Institutional Client" class="clay-input w-full px-3 py-2 rounded-xl font-bold text-slate-800 mt-0.5">
+          <input type="text" id="client-name" value="Institutional Client" oninput="renderAll()" class="clay-input w-full px-3 py-2 rounded-xl font-bold text-slate-800 mt-0.5">
         </div>
       </div>
     </div>
@@ -130,22 +137,22 @@
     </div>
     
     <div class="grid grid-cols-3 gap-2 text-xs font-bold mb-3">
-      <button onclick="selectDeveloper('Binghatti')" class="dev-btn p-2 rounded-xl text-center transition btn-active" data-dev="Binghatti">
+      <button type="button" onclick="selectDeveloper('Binghatti')" class="dev-btn p-2 rounded-xl text-center transition btn-active" data-dev="Binghatti">
         ⚡ Binghatti
       </button>
-      <button onclick="selectDeveloper('Emaar')" class="dev-btn p-2 rounded-xl text-center transition btn-inactive" data-dev="Emaar">
+      <button type="button" onclick="selectDeveloper('Emaar')" class="dev-btn p-2 rounded-xl text-center transition btn-inactive" data-dev="Emaar">
         🏢 Emaar
       </button>
-      <button onclick="selectDeveloper('Sobha')" class="dev-btn p-2 rounded-xl text-center transition btn-inactive" data-dev="Sobha">
+      <button type="button" onclick="selectDeveloper('Sobha')" class="dev-btn p-2 rounded-xl text-center transition btn-inactive" data-dev="Sobha">
         💎 Sobha
       </button>
-      <button onclick="selectDeveloper('Danube')" class="dev-btn p-2 rounded-xl text-center transition btn-inactive" data-dev="Danube">
+      <button type="button" onclick="selectDeveloper('Danube')" class="dev-btn p-2 rounded-xl text-center transition btn-inactive" data-dev="Danube">
         🪙 Danube (1%)
       </button>
-      <button onclick="selectDeveloper('Damac')" class="dev-btn p-2 rounded-xl text-center transition btn-inactive" data-dev="Damac">
+      <button type="button" onclick="selectDeveloper('Damac')" class="dev-btn p-2 rounded-xl text-center transition btn-inactive" data-dev="Damac">
         👑 Damac
       </button>
-      <button onclick="selectDeveloper('Sky Villa')" class="dev-btn p-2 rounded-xl text-center transition btn-inactive" data-dev="Sky Villa">
+      <button type="button" onclick="selectDeveloper('Sky Villa')" class="dev-btn p-2 rounded-xl text-center transition btn-inactive" data-dev="Sky Villa">
         🏖️ Sky Villa
       </button>
     </div>
@@ -162,7 +169,7 @@
       <div>
         <p class="text-[10px] uppercase font-bold tracking-widest text-slate-400">Net Annual Yield</p>
         <div class="flex items-baseline gap-2 mt-0.5">
-          <span id="roi-val" class="text-4xl font-extrabold text-blue-600 tracking-tight">8.80%</span>
+          <span id="roi-val" class="text-4xl font-extrabold text-blue-600 tracking-tight">7.70%</span>
           <span class="text-[11px] font-extrabold text-emerald-600 bg-emerald-100/70 border border-emerald-200 px-2 py-0.5 rounded-full">0% TAX</span>
         </div>
       </div>
@@ -172,11 +179,11 @@
     <div class="grid grid-cols-2 gap-3 mt-4 pt-4 border-t border-slate-100">
       <div class="clay-inset p-3">
         <p class="text-[10px] text-slate-400 font-bold uppercase">Net Annual Income</p>
-        <p id="net-rent-val" class="text-base font-extrabold text-slate-900 mt-0.5">$27,557</p>
+        <p id="net-rent-val" class="text-base font-extrabold text-slate-900 mt-0.5">$24,112</p>
       </div>
       <div class="clay-inset p-3">
         <p class="text-[10px] text-slate-400 font-bold uppercase">5-Yr Wealth Creation</p>
-        <p id="total-growth-val" class="text-base font-extrabold text-emerald-600 mt-0.5">+$247,385</p>
+        <p id="total-growth-val" class="text-base font-extrabold text-emerald-600 mt-0.5">+$230,162</p>
       </div>
     </div>
   </section>
@@ -188,12 +195,12 @@
       <span id="selected-loc-label" class="text-[10px] text-blue-600 font-bold">Business Bay</span>
     </div>
     <div class="flex gap-2 overflow-x-auto pb-1 no-scrollbar text-xs">
-      <button onclick="selectArea('Business Bay')" class="area-btn px-3.5 py-2 rounded-2xl font-bold whitespace-nowrap transition btn-active" data-area="Business Bay">Business Bay</button>
-      <button onclick="selectArea('Downtown Dubai')" class="area-btn px-3.5 py-2 rounded-2xl font-bold whitespace-nowrap transition btn-inactive" data-area="Downtown Dubai">Downtown</button>
-      <button onclick="selectArea('Dubai Marina')" class="area-btn px-3.5 py-2 rounded-2xl font-bold whitespace-nowrap transition btn-inactive" data-area="Dubai Marina">Dubai Marina</button>
-      <button onclick="selectArea('JVC')" class="area-btn px-3.5 py-2 rounded-2xl font-bold whitespace-nowrap transition btn-inactive" data-area="JVC">JVC</button>
-      <button onclick="selectArea('Sobha Hartland')" class="area-btn px-3.5 py-2 rounded-2xl font-bold whitespace-nowrap transition btn-inactive" data-area="Sobha Hartland">Sobha Hartland</button>
-      <button onclick="selectArea('Palm Jumeirah')" class="area-btn px-3.5 py-2 rounded-2xl font-bold whitespace-nowrap transition btn-inactive" data-area="Palm Jumeirah">Palm Jumeirah</button>
+      <button type="button" onclick="selectArea('Business Bay')" class="area-btn px-3.5 py-2 rounded-2xl font-bold whitespace-nowrap transition btn-active" data-area="Business Bay">Business Bay</button>
+      <button type="button" onclick="selectArea('Downtown Dubai')" class="area-btn px-3.5 py-2 rounded-2xl font-bold whitespace-nowrap transition btn-inactive" data-area="Downtown Dubai">Downtown</button>
+      <button type="button" onclick="selectArea('Dubai Marina')" class="area-btn px-3.5 py-2 rounded-2xl font-bold whitespace-nowrap transition btn-inactive" data-area="Dubai Marina">Dubai Marina</button>
+      <button type="button" onclick="selectArea('JVC')" class="area-btn px-3.5 py-2 rounded-2xl font-bold whitespace-nowrap transition btn-inactive" data-area="JVC">JVC</button>
+      <button type="button" onclick="selectArea('Sobha Hartland')" class="area-btn px-3.5 py-2 rounded-2xl font-bold whitespace-nowrap transition btn-inactive" data-area="Sobha Hartland">Sobha Hartland</button>
+      <button type="button" onclick="selectArea('Palm Jumeirah')" class="area-btn px-3.5 py-2 rounded-2xl font-bold whitespace-nowrap transition btn-inactive" data-area="Palm Jumeirah">Palm Jumeirah</button>
     </div>
   </section>
 
@@ -201,16 +208,16 @@
   <section class="clay-surface p-5 mb-4">
     <div class="flex justify-between items-center mb-2">
       <span class="text-xs font-extrabold uppercase tracking-wide text-slate-700">3. Acquisition Budget</span>
-      <span class="text-[10px] font-bold text-blue-600">Manual Entry Supported</span>
+      <span id="effective-price-badge" class="text-[10px] font-bold text-blue-600">Manual Entry Supported</span>
     </div>
 
     <div class="relative mb-3">
-      <span id="input-curr-prefix" class="absolute left-3.5 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400">$</span>
+      <span id="input-curr-prefix" class="absolute left-3.5 top-1/2 -translate-y-1/2 text-xs font-extrabold text-slate-500">$</span>
       <input
         type="number"
         id="price-input"
         value="313145"
-        class="clay-input w-full pl-10 pr-4 py-3 rounded-2xl text-base font-extrabold text-slate-800"
+        class="clay-input w-full pl-12 pr-4 py-3 rounded-2xl text-base font-extrabold text-slate-800"
       />
     </div>
 
@@ -219,7 +226,7 @@
       id="price-slider"
       min="100000"
       max="3000000"
-      step="10000"
+      step="5000"
       value="313145"
       class="w-full h-2.5 bg-slate-200 rounded-lg cursor-pointer mb-3"
     />
@@ -237,20 +244,20 @@
   <section class="clay-surface p-5 mb-4">
     <div class="flex justify-between items-center mb-3">
       <span class="text-xs font-extrabold uppercase tracking-wide text-slate-700">4. Payment Structure & Incentives</span>
-      <span class="text-[10px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full font-bold">Escrow Law Protected</span>
+      <span id="split-total-badge" class="text-[10px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full font-bold">100% Allocation ✓</span>
     </div>
 
     <div class="grid grid-cols-3 gap-1.5 p-1 clay-inset rounded-2xl mb-4 text-[11px] font-bold">
-      <button onclick="applyPresetPlan('1pct')" class="plan-btn py-2 rounded-xl transition btn-active" data-plan="1pct">1% Monthly</button>
-      <button onclick="applyPresetPlan('milestone')" class="plan-btn py-2 rounded-xl transition btn-inactive" data-plan="milestone">60/40 Plan</button>
-      <button onclick="applyPresetPlan('phpp')" class="plan-btn py-2 rounded-xl transition btn-inactive" data-plan="phpp">Post-Handover</button>
+      <button type="button" onclick="applyPresetPlan('1pct')" class="plan-btn py-2 rounded-xl transition btn-active" data-plan="1pct">1% Monthly</button>
+      <button type="button" onclick="applyPresetPlan('milestone')" class="plan-btn py-2 rounded-xl transition btn-inactive" data-plan="milestone">60/40 Plan</button>
+      <button type="button" onclick="applyPresetPlan('phpp')" class="plan-btn py-2 rounded-xl transition btn-inactive" data-plan="phpp">Post-Handover</button>
     </div>
 
     <div class="grid grid-cols-2 gap-2.5 mb-3 text-xs">
       <div class="clay-inset p-2.5">
         <label class="text-[10px] font-bold text-slate-500 uppercase">Special Discount (%)</label>
         <div class="flex items-center gap-1 mt-1">
-          <input type="number" id="custom-discount" value="0" min="0" max="15" step="0.5" oninput="renderAll()" class="w-14 bg-white border border-slate-200 rounded-lg px-2 py-1 font-extrabold text-blue-600 outline-none">
+          <input type="number" id="custom-discount" value="0" min="0" max="25" step="0.5" oninput="handleDiscountChange()" class="w-16 bg-white border border-slate-200 rounded-lg px-2 py-1 font-extrabold text-blue-600 outline-none">
           <span class="text-xs font-bold text-slate-400">% Off</span>
         </div>
       </div>
@@ -267,46 +274,73 @@
     <div class="grid grid-cols-3 gap-2 mb-4 text-[11px]">
       <div class="clay-inset p-2 text-center">
         <span class="text-[9px] font-bold text-slate-400 uppercase">Down Pay %</span>
-        <input type="number" id="dp-pct-input" value="20" min="5" max="50" oninput="handleMilestoneChange('dp')" class="w-full text-center bg-white border border-slate-200 rounded-lg py-1 font-extrabold text-slate-800 mt-1 outline-none">
+        <input type="number" id="dp-pct-input" value="20" min="5" max="80" oninput="handleMilestoneChange('dp')" class="w-full text-center bg-white border border-slate-200 rounded-lg py-1 font-extrabold text-slate-800 mt-1 outline-none">
       </div>
       <div class="clay-inset p-2 text-center">
         <span class="text-[9px] font-bold text-slate-400 uppercase">During Build %</span>
-        <input type="number" id="during-pct-input" value="40" min="10" max="80" oninput="handleMilestoneChange('during')" class="w-full text-center bg-white border border-slate-200 rounded-lg py-1 font-extrabold text-slate-800 mt-1 outline-none">
+        <input type="number" id="during-pct-input" value="45" min="5" max="80" oninput="handleMilestoneChange('during')" class="w-full text-center bg-white border border-slate-200 rounded-lg py-1 font-extrabold text-slate-800 mt-1 outline-none">
       </div>
       <div class="clay-inset p-2 text-center">
         <span class="text-[9px] font-bold text-slate-400 uppercase">Handover %</span>
-        <input type="number" id="handover-pct-input" value="40" min="10" max="80" oninput="handleMilestoneChange('handover')" class="w-full text-center bg-white border border-slate-200 rounded-lg py-1 font-extrabold text-slate-800 mt-1 outline-none">
+        <input type="number" id="handover-pct-input" value="35" min="5" max="80" oninput="handleMilestoneChange('handover')" class="w-full text-center bg-white border border-slate-200 rounded-lg py-1 font-extrabold text-slate-800 mt-1 outline-none">
       </div>
     </div>
 
     <div class="space-y-2 text-xs" id="schedule-container"></div>
   </section>
 
-  <!-- Output Preview -->
+  <!-- Output Preview with WhatsApp Buttons -->
   <div id="memo-output-box" class="clay-surface p-4 mb-5 hidden border-2 border-blue-500">
     <div class="flex items-center justify-between mb-2">
-      <span class="text-xs font-extrabold text-blue-700 uppercase">✓ Generated YIELDEX Memo</span>
-      <button onclick="copyGeneratedMemo()" class="text-[11px] font-bold bg-blue-600 text-white px-3 py-1 rounded-lg">Copy Memo</button>
+      <span class="text-xs font-extrabold text-blue-700 uppercase">✓ Live YIELDEX Memorandum</span>
+      <button type="button" onclick="copyGeneratedMemo()" class="text-[11px] font-bold bg-blue-600 active:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-sm">
+        📋 Copy Memo
+      </button>
     </div>
-    <pre id="memo-text-preview" class="text-[10px] bg-slate-900 text-emerald-400 p-3 rounded-xl overflow-x-auto whitespace-pre-wrap font-mono"></pre>
+
+    <pre id="memo-text-preview" class="text-[10px] bg-slate-900 text-emerald-400 p-3 rounded-xl overflow-x-auto whitespace-pre-wrap font-mono mb-3 leading-relaxed"></pre>
+
+    <!-- WhatsApp Action Grid -->
+    <div class="grid grid-cols-2 gap-2">
+      <button type="button" onclick="shareViaWhatsApp()" class="py-3 px-2 rounded-xl bg-emerald-600 active:bg-emerald-700 text-white font-extrabold text-[11px] flex items-center justify-center gap-1.5 shadow-md active:scale-95 transition">
+        <span>📲 Forward Client</span>
+      </button>
+      <button type="button" onclick="contactVIPDesk()" class="py-3 px-2 rounded-xl bg-slate-900 active:bg-black text-amber-400 font-extrabold text-[11px] flex items-center justify-center gap-1.5 shadow-md border border-amber-400/30 active:scale-95 transition">
+        <span>🟢 VIP WhatsApp Desk</span>
+      </button>
+    </div>
   </div>
 
   <!-- Sticky Bottom Button -->
-  <div class="fixed bottom-0 left-0 right-0 p-3.5 bg-white/90 backdrop-blur-md border-t border-slate-200 z-50">
+  <div class="fixed bottom-0 left-0 right-0 p-3.5 bg-white/90 backdrop-blur-md border-t border-slate-200 z-40">
     <div class="max-w-lg mx-auto" id="cta-container">
-      <button onclick="generateMemo()" class="clay-btn-blue w-full py-4 px-4 font-extrabold text-base rounded-2xl flex items-center justify-center gap-2">
-        <span>⚡ Generate Memo</span>
+      <button type="button" onclick="generateMemo(true)" class="clay-btn-blue w-full py-4 px-4 font-extrabold text-base rounded-2xl flex items-center justify-center gap-2">
+        <span>⚡ Generate & Copy Institutional Memo</span>
       </button>
     </div>
   </div>
 
   <script>
+    const WHATSAPP_NUMBER = "919897716178";
+
     try {
-      if (window.Telegram?.WebApp) {
+      if (window.Telegram && window.Telegram.WebApp) {
         window.Telegram.WebApp.ready();
         window.Telegram.WebApp.expand();
       }
-    } catch(e) {}
+    } catch (e) {}
+
+    function showToast(message) {
+      const banner = document.getElementById('toast-banner');
+      banner.innerText = message;
+      banner.classList.remove('opacity-0');
+      banner.classList.add('opacity-100');
+      clearTimeout(window._toastTimer);
+      window._toastTimer = setTimeout(() => {
+        banner.classList.remove('opacity-100');
+        banner.classList.add('opacity-0');
+      }, 2400);
+    }
 
     function triggerHaptic(type = 'light') {
       try {
@@ -317,7 +351,46 @@
             window.Telegram.WebApp.HapticFeedback.impactOccurred(type);
           }
         }
-      } catch(e) {}
+      } catch (e) {}
+    }
+
+    function copyTextSafe(text, toastMsg) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+          showToast(toastMsg);
+        }).catch(() => {
+          fallbackCopy(text, toastMsg);
+        });
+      } else {
+        fallbackCopy(text, toastMsg);
+      }
+    }
+
+    function fallbackCopy(text, toastMsg) {
+      try {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        showToast(toastMsg);
+      } catch (e) {
+        showToast("✓ Memo Ready Below");
+      }
+    }
+
+    function openSafeLink(url) {
+      try {
+        if (window.Telegram?.WebApp?.openLink) {
+          window.Telegram.WebApp.openLink(url);
+          return;
+        }
+      } catch (e) {}
+      window.open(url, '_blank');
     }
 
     const RATES = { AED: 1.0, USD: 0.2723, GBP: 0.2105, EUR: 0.2469 };
@@ -370,8 +443,8 @@
 
       const rateBadge = document.getElementById('rate-badge');
       if (curr === 'USD') rateBadge.innerText = "1 USD = 3.6725 AED (Official Peg)";
-      else if (curr === 'GBP') rateBadge.innerText = "1 GBP ≈ 4.75 AED (Strong FX Advantage)";
-      else if (curr === 'EUR') rateBadge.innerText = "1 EUR ≈ 4.05 AED (High Real Yield)";
+      else if (curr === 'GBP') rateBadge.innerText = "1 GBP ≈ 4.75 AED (FX Advantage)";
+      else if (curr === 'EUR') rateBadge.innerText = "1 EUR ≈ 4.05 AED (Eurozone Desk)";
       else rateBadge.innerText = "Official UAE Dirham (Central Bank)";
 
       triggerHaptic('light');
@@ -389,13 +462,12 @@
 
       highlightGroup('.dev-btn', 'data-dev', devName);
       highlightGroup('.area-btn', 'data-area', currentArea);
-      applyPresetPlan(currentPlan);
 
       document.getElementById('dev-tag').innerText = data.tag;
       document.getElementById('dev-focus-text').innerText = data.focus;
       document.getElementById('selected-loc-label').innerText = currentArea;
 
-      triggerHaptic('medium');
+      applyPresetPlan(currentPlan);
       syncSliderAndInput();
       renderAll();
     }
@@ -420,8 +492,8 @@
 
       if (planKey === '1pct') {
         document.getElementById('dp-pct-input').value = 20;
-        document.getElementById('during-pct-input').value = 40;
-        document.getElementById('handover-pct-input').value = 40;
+        document.getElementById('during-pct-input').value = 45;
+        document.getElementById('handover-pct-input').value = 35;
       } else if (planKey === 'milestone') {
         document.getElementById('dp-pct-input').value = 20;
         document.getElementById('during-pct-input').value = 40;
@@ -436,13 +508,33 @@
       renderAll();
     }
 
+    function handleDiscountChange() {
+      let val = Number(document.getElementById('custom-discount').value);
+      if (val < 0) document.getElementById('custom-discount').value = 0;
+      if (val > 30) document.getElementById('custom-discount').value = 30;
+      renderAll();
+    }
+
     function handleMilestoneChange(changedField) {
-      const dp = Number(document.getElementById('dp-pct-input').value) || 0;
-      const during = Number(document.getElementById('during-pct-input').value) || 0;
-      if (changedField !== 'handover') {
-        const remaining = Math.max(0, 100 - (dp + during));
-        document.getElementById('handover-pct-input').value = remaining;
+      let dp = Math.max(0, Math.min(90, Number(document.getElementById('dp-pct-input').value) || 0));
+      let during = Math.max(0, Math.min(90, Number(document.getElementById('during-pct-input').value) || 0));
+      let handover = Math.max(0, Math.min(90, Number(document.getElementById('handover-pct-input').value) || 0));
+
+      if (changedField === 'dp') {
+        if (dp + during > 100) during = Math.max(0, 100 - dp);
+        handover = Math.max(0, 100 - (dp + during));
+      } else if (changedField === 'during') {
+        if (dp + during > 100) dp = Math.max(0, 100 - during);
+        handover = Math.max(0, 100 - (dp + during));
+      } else if (changedField === 'handover') {
+        if (dp + handover > 100) dp = Math.max(0, 100 - handover);
+        during = Math.max(0, 100 - (dp + handover));
       }
+
+      document.getElementById('dp-pct-input').value = dp;
+      document.getElementById('during-pct-input').value = during;
+      document.getElementById('handover-pct-input').value = handover;
+
       renderAll();
     }
 
@@ -454,7 +546,7 @@
       const maxConv = Math.round(15000000 * RATES[currentCurrency]);
       priceSlider.min = minConv;
       priceSlider.max = maxConv;
-      priceSlider.value = convPrice;
+      priceSlider.value = Math.min(maxConv, Math.max(minConv, convPrice));
     }
 
     priceSlider.addEventListener('input', (e) => {
@@ -465,9 +557,10 @@
     });
 
     priceInput.addEventListener('input', (e) => {
-      const val = Math.max(10000, Number(e.target.value) || 0);
-      baseAED = Math.round(val / RATES[currentCurrency]);
-      priceSlider.value = val;
+      const raw = Number(e.target.value);
+      if (!raw || raw < 1000) return;
+      baseAED = Math.round(raw / RATES[currentCurrency]);
+      priceSlider.value = Math.min(Number(priceSlider.max), Math.max(Number(priceSlider.min), raw));
       renderAll();
     });
 
@@ -496,21 +589,35 @@
     }
 
     function getDiscountedBaseAED() {
-      const discountPct = Number(document.getElementById('custom-discount').value) || 0;
+      const discountPct = Math.max(0, Math.min(30, Number(document.getElementById('custom-discount').value) || 0));
       return baseAED * (1 - (discountPct / 100));
     }
 
     function renderAll() {
       const effectiveAED = getDiscountedBaseAED();
-      const annualRent = effectiveAED * (currentYield / 100);
-      const serviceCharge = effectiveAED * 0.011;
+      const discountSavingsAED = Math.max(0, baseAED - effectiveAED);
+
+      // Market rent and service charge are anchored to the underlying asset valuation (baseAED)
+      const annualRent = baseAED * (currentYield / 100);
+      const serviceCharge = baseAED * 0.011;
       const netRent = Math.max(0, annualRent - serviceCharge);
+
+      // Net yield reflects actual return against net acquisition cost (effectiveAED)
       const netYield = ((netRent / effectiveAED) * 100).toFixed(2);
-      const fiveYearGrowth = Math.round((effectiveAED * 0.35) + (netRent * 5));
+      const fiveYearGrowth = Math.round(discountSavingsAED + (baseAED * 0.35) + (netRent * 5));
 
       document.getElementById('roi-val').innerText = netYield + '%';
       document.getElementById('net-rent-val').innerText = formatSelected(netRent);
       document.getElementById('total-growth-val').innerText = '+' + formatSelected(fiveYearGrowth);
+
+      const effBadge = document.getElementById('effective-price-badge');
+      if (discountSavingsAED > 0) {
+        effBadge.innerText = `Net Price: ${formatSelected(effectiveAED)}`;
+        effBadge.className = "text-[10px] font-extrabold text-emerald-600";
+      } else {
+        effBadge.innerText = "Manual Entry Supported";
+        effBadge.className = "text-[10px] font-bold text-blue-600";
+      }
 
       const gvBox = document.getElementById('golden-visa-tag');
       if (effectiveAED >= 2000000) {
@@ -523,23 +630,29 @@
         const diff = 2000000 - effectiveAED;
         gvBox.innerHTML = `
           <span class="text-[10px] font-semibold text-slate-400">
-            ${formatSelected(diff)} to Golden Visa
+            +${formatSelected(diff)} for Golden Visa
           </span>
         `;
       }
 
       document.getElementById('unit-match-val').innerText = getUnitName();
       renderPaymentSchedule();
+
+      // Auto-refresh memo if already open
+      const previewBox = document.getElementById('memo-output-box');
+      if (!previewBox.classList.contains('hidden')) {
+        generateMemo(false);
+      }
     }
 
     function renderPaymentSchedule() {
       const container = document.getElementById('schedule-container');
       const effectiveAED = getDiscountedBaseAED();
 
-      const dpPct = Number(document.getElementById('dp-pct-input').value) || 20;
-      const duringPct = Number(document.getElementById('during-pct-input').value) || 40;
-      const handoverPct = Number(document.getElementById('handover-pct-input').value) || 40;
-      const dldPct = Number(document.getElementById('dld-waiver-select').value) || 0;
+      const dpPct = Number(document.getElementById('dp-pct-input').value) || 0;
+      const duringPct = Number(document.getElementById('during-pct-input').value) || 0;
+      const handoverPct = Number(document.getElementById('handover-pct-input').value) || 0;
+      const dldPct = Number(document.getElementById('dld-waiver-select').value);
 
       const dpAmount = effectiveAED * (dpPct / 100);
       const duringAmount = effectiveAED * (duringPct / 100);
@@ -552,27 +665,28 @@
           <span class="font-extrabold text-slate-900">${formatSelected(dpAmount)}</span>
         </div>
         <div class="flex justify-between items-center p-2.5 rounded-xl bg-blue-50/70 border border-blue-100">
-          <div><span class="font-bold text-blue-900">${currentPlan === '1pct' ? 'Monthly Installments (1%)' : 'During Construction'} (${duringPct}%)</span><p class="text-[10px] text-blue-600">${currentPlan === '1pct' ? formatSelected(effectiveAED * 0.01) + '/mo' : 'Milestone Linked'}</p></div>
+          <div><span class="font-bold text-blue-900">${currentPlan === '1pct' ? 'Monthly Installments (1%)' : 'During Construction'} (${duringPct}%)</span><p class="text-[10px] text-blue-600">${currentPlan === '1pct' ? formatSelected(effectiveAED * 0.01) + '/mo cashflow plan' : 'Construction Milestone Linked'}</p></div>
           <span class="font-extrabold text-blue-700">${formatSelected(duringAmount)}</span>
         </div>
         <div class="flex justify-between items-center p-2.5 rounded-xl bg-slate-50 border border-slate-100">
-          <div><span class="font-bold text-slate-800">${currentPlan === 'phpp' ? 'Post-Handover 3-Yr' : 'On Key Handover'} (${handoverPct}%)</span><p class="text-[10px] text-slate-400">Mortgageable on physical delivery</p></div>
+          <div><span class="font-bold text-slate-800">${currentPlan === 'phpp' ? 'Post-Handover (36 Months)' : 'On Key Handover'} (${handoverPct}%)</span><p class="text-[10px] text-slate-400">${currentPlan === 'phpp' ? 'Paid from rental income' : 'Cash or Mortgage financing'}</p></div>
           <span class="font-extrabold text-slate-900">${formatSelected(handoverAmount)}</span>
         </div>
         <div class="flex justify-between items-center p-2.5 rounded-xl bg-slate-50 border border-slate-100">
-          <div><span class="font-bold text-slate-800">Govt DLD Fee (${dldPct}%)</span><p class="text-[10px] text-slate-400">${dldPct === 0 ? '100% Developer Paid Waiver' : dldPct === 2 ? '50% DLD Waiver' : 'Standard Title Fee'}</p></div>
-          <span class="font-extrabold ${dldPct === 0 ? 'text-emerald-600' : 'text-slate-600'}">${dldPct === 0 ? 'FREE (Waiver)' : formatSelected(dldAmount)}</span>
+          <div><span class="font-bold text-slate-800">Govt DLD Registration (${dldPct}%)</span><p class="text-[10px] text-slate-400">${dldPct === 0 ? '100% Developer Paid Waiver' : dldPct === 2 ? '50% Institutional Waiver' : 'Standard Dubai Land Dept Fee'}</p></div>
+          <span class="font-extrabold ${dldPct === 0 ? 'text-emerald-600' : 'text-slate-600'}">${dldPct === 0 ? 'FREE (Waived)' : formatSelected(dldAmount)}</span>
         </div>
       `;
     }
 
-    function generateMemo() {
+    function buildMemoString() {
       const effectiveAED = getDiscountedBaseAED();
-      const annualRent = effectiveAED * (currentYield / 100);
-      const serviceCharge = effectiveAED * 0.011;
+      const discountSavingsAED = Math.max(0, baseAED - effectiveAED);
+      const annualRent = baseAED * (currentYield / 100);
+      const serviceCharge = baseAED * 0.011;
       const netRent = Math.max(0, annualRent - serviceCharge);
       const netYield = ((netRent / effectiveAED) * 100).toFixed(2);
-      const fiveYearGain = Math.round((effectiveAED * 0.35) + (netRent * 5));
+      const fiveYearGain = Math.round(discountSavingsAED + (baseAED * 0.35) + (netRent * 5));
       const goldenVisaEligible = effectiveAED >= 2000000;
 
       const agency = document.getElementById('agency-name').value.trim() || "Apex Capital Partners";
@@ -580,12 +694,12 @@
       const client = document.getElementById('client-name').value.trim() || "Institutional Client";
 
       const discountPct = Number(document.getElementById('custom-discount').value) || 0;
-      const dpPct = Number(document.getElementById('dp-pct-input').value) || 20;
-      const duringPct = Number(document.getElementById('during-pct-input').value) || 40;
-      const handoverPct = Number(document.getElementById('handover-pct-input').value) || 40;
-      const dldPct = Number(document.getElementById('dld-waiver-select').value) || 0;
+      const dpPct = Number(document.getElementById('dp-pct-input').value) || 0;
+      const duringPct = Number(document.getElementById('during-pct-input').value) || 0;
+      const handoverPct = Number(document.getElementById('handover-pct-input').value) || 0;
+      const dldPct = Number(document.getElementById('dld-waiver-select').value);
 
-      const memo = `🏛️ YIELDEX CAPITAL ALLOCATION MEMORANDUM
+      return `🏛️ YIELDEX CAPITAL ALLOCATION MEMORANDUM
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 🏢 Issuing Desk: ${agency}
 👤 Senior Advisor: ${advisor}
@@ -598,8 +712,8 @@
 • Developer Brand: ${currentDeveloper}
 • Target Prime Location: ${currentArea}, Dubai UAE
 • Allocation Tier: ${getUnitName()}
-• Base Valuation: ${formatBoth(baseAED)}
-${discountPct > 0 ? `• Institutional Incentive: ${discountPct}\% OFF (-${formatBoth(baseAED * (discountPct/100))})\n• Net Agreed Price: ${formatBoth(effectiveAED)}` : `• Net Agreed Price: ${formatBoth(effectiveAED)}`}
+• Market Valuation: ${formatBoth(baseAED)}
+${discountPct > 0 ? `• Institutional Discount: ${discountPct}% OFF (-${formatBoth(discountSavingsAED)})\n• Net Acquisition Price: ${formatBoth(effectiveAED)}` : `• Net Acquisition Price: ${formatBoth(effectiveAED)}`}
 • Settlement Currency: ${currentCurrency}
 
 📊 INSTITUTIONAL YIELD BENCHMARK
@@ -607,52 +721,80 @@ ${discountPct > 0 ? `• Institutional Incentive: ${discountPct}\% OFF (-${forma
 • Expected Net Rental Yield: ${netYield}% / Year (100% Tax-Free)
 • Net Annual Rental Income: ${formatBoth(netRent)}
 • 5-Year Capital & Rent Growth: +${formatBoth(fiveYearGain)}
-• UAE 10-Yr Golden Visa: ${goldenVisaEligible ? "✅ ELIGIBLE (Direct Full Family Residency)" : "❌ Needs " + formatBoth(2000000 - effectiveAED) + " to qualify"}
+• UAE 10-Yr Golden Visa: ${goldenVisaEligible ? "✅ ELIGIBLE (Direct Full Family Residency)" : "❌ Requires +" + formatBoth(2000000 - effectiveAED) + " to qualify"}
 
 💳 STRUCTURED PAYMENT SCHEDULE
 ─────────────────────────────
 • Down Payment (${dpPct}%): ${formatBoth(effectiveAED * (dpPct/100))}
-• During Construction (${duringPct}%): ${formatBoth(effectiveAED * (duringPct/100))} ${currentPlan === '1pct' ? '(1% Monthly Cashflow)' : ''}
-• Final Handover (${handoverPct}%): ${formatBoth(effectiveAED * (handoverPct/100))}
+• During Construction (${duringPct}%): ${formatBoth(effectiveAED * (duringPct/100))} ${currentPlan === '1pct' ? '(1% Monthly Plan)' : ''}
+• Handover / Post-Handover (${handoverPct}%): ${formatBoth(effectiveAED * (handoverPct/100))}
 • Dubai Land Dept (DLD ${dldPct}%): ${dldPct === 0 ? "100% WAIVED BY DEVELOPER (0 AED)" : formatBoth(effectiveAED * (dldPct/100))}
 
 🛡️ REGULATORY SAFEGUARDS & GOVERNANCE
 ─────────────────────────────
 1. Escrow Protection: Funds held strictly in Central Bank Escrow (Dubai Law No. 8).
-2. Taxation: 0% Capital Gains, 0% Corporate, 0% Income Tax.
+2. Taxation: 0% Capital Gains, 0% Corporate, 0% Personal Income Tax.
 3. Currency Security: AED pegged directly to USD (1 USD = 3.6725 AED).
-4. Settlement Modes: Wire Transfer (USD/GBP/EUR) & Legal Crypto (USDT/BTC) supported.
+4. Settlement Modes: Bank Wire (USD/GBP/EUR) & Regulated Crypto (USDT/BTC).
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Generated via YIELDEX Institutional Terminal
 Confidential Term Sheet — For Investor Review Only.`;
+    }
 
+    function generateMemo(shouldScrollAndCopy = true) {
+      const memo = buildMemoString();
       const previewBox = document.getElementById('memo-output-box');
       document.getElementById('memo-text-preview').innerText = memo;
       previewBox.classList.remove('hidden');
-      previewBox.scrollIntoView({ behavior: 'smooth' });
 
-      navigator.clipboard.writeText(memo);
-      triggerHaptic('success');
-      alert("✓ YIELDEX Memorandum Generated & Copied to Clipboard!");
+      if (shouldScrollAndCopy) {
+        triggerHaptic('success');
+        copyTextSafe(memo, "✓ YIELDEX Memo Generated & Copied!");
+        setTimeout(() => {
+          previewBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 100);
+      }
     }
 
     function copyGeneratedMemo() {
       const text = document.getElementById('memo-text-preview').innerText;
-      navigator.clipboard.writeText(text);
       triggerHaptic('success');
-      alert("YIELDEX Memo re-copied to clipboard!");
+      copyTextSafe(text, "✓ Memo Copied to Clipboard!");
+    }
+
+    function shareViaWhatsApp() {
+      const memoText = document.getElementById('memo-text-preview').innerText || buildMemoString();
+      triggerHaptic('light');
+      const shareUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(memoText)}`;
+      openSafeLink(shareUrl);
+    }
+
+    function contactVIPDesk() {
+      const effectiveAED = getDiscountedBaseAED();
+      const client = document.getElementById('client-name').value.trim() || "Investor";
+      triggerHaptic('medium');
+      const text = `Hi YIELDEX Institutional Desk, I generated an allocation memo for *${currentDeveloper}* in *${currentArea}* at *${formatBoth(effectiveAED)}* (Client: ${client}). Please share available unit inventory and booking details.`;
+      const directUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
+      openSafeLink(directUrl);
     }
 
     function resetDefaults() {
-      selectDeveloper('Binghatti');
-      setCurrency('USD');
+      document.getElementById('agency-name').value = "Apex Capital Partners";
+      document.getElementById('advisor-name').value = "Wealth Advisory Desk";
+      document.getElementById('client-name').value = "Institutional Client";
       document.getElementById('custom-discount').value = 0;
-      document.getElementById('dld-waiver-select').value = 4;
+      document.getElementById('dld-waiver-select').value = "4";
       document.getElementById('memo-output-box').classList.add('hidden');
+
+      setCurrency('USD');
+      selectDeveloper('Binghatti');
       triggerHaptic('warning');
+      showToast("↺ Terminal Reset to Defaults");
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
+    // Initial Boot
     syncSliderAndInput();
     renderAll();
   </script>
