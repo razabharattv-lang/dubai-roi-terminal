@@ -8,184 +8,204 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
+    * { -webkit-tap-highlight-color: transparent; }
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
-      background-color: #EEF2F8;
-      color: #1e293b;
-      -webkit-tap-highlight-color: transparent;
+      background-color: #E8EDF4;
+      color: #0f172a;
     }
-    /* Claymorphism 3D Shadows */
-    .clay-card {
+    /* Claymorphism 3D Depth Classes */
+    .clay-surface {
       background: #FFFFFF;
       border-radius: 24px;
-      box-shadow: 9px 9px 18px #d6dfea, -9px -9px 18px #ffffff;
-      border: 1px solid rgba(255, 255, 255, 0.8);
+      box-shadow: 8px 8px 18px #cbd5e1, -8px -8px 18px #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.9);
     }
-    .clay-card-inset {
-      background: #F4F7FC;
-      border-radius: 18px;
-      box-shadow: inset 4px 4px 8px #d6dfea, inset -4px -4px 8px #ffffff;
-    }
-    .clay-btn-gold {
-      background: linear-gradient(135deg, #FBBF24 0%, #D97706 100%);
-      border-radius: 20px;
-      box-shadow: 6px 6px 14px #d6dfea, -6px -6px 14px #ffffff, inset 2px 2px 4px rgba(255,255,255,0.4);
-      color: #ffffff;
-    }
-    .clay-btn-gold:active {
-      box-shadow: inset 3px 3px 6px rgba(0,0,0,0.2);
-      transform: translateY(1px);
+    .clay-inset {
+      background: #F1F5F9;
+      border-radius: 16px;
+      box-shadow: inset 3px 3px 6px #cbd5e1, inset -3px -3px 6px #ffffff;
     }
     .clay-pill {
-      box-shadow: 4px 4px 8px #d6dfea, -4px -4px 8px #ffffff;
+      background: #FFFFFF;
+      box-shadow: 4px 4px 10px #cbd5e1, -4px -4px 10px #ffffff;
+      transition: all 0.15s ease-in-out;
+    }
+    .clay-pill:active {
+      transform: scale(0.97);
     }
     .clay-pill-active {
       background: #2563EB !important;
-      color: #ffffff !important;
-      box-shadow: inset 2px 2px 5px rgba(0,0,0,0.2) !important;
+      color: #FFFFFF !important;
+      box-shadow: inset 2px 2px 5px rgba(0,0,0,0.25) !important;
+    }
+    .clay-btn-gold {
+      background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+      box-shadow: 6px 6px 14px #cbd5e1, -6px -6px 14px #ffffff, inset 1px 1px 2px rgba(255,255,255,0.4);
+      color: #FFFFFF;
+    }
+    .clay-btn-gold:active {
+      box-shadow: inset 3px 3px 6px rgba(0,0,0,0.3);
+      transform: translateY(1px);
+    }
+    .clay-input {
+      background: #F1F5F9;
+      box-shadow: inset 3px 3px 6px #cbd5e1, inset -3px -3px 6px #ffffff;
+      border: 1px solid #e2e8f0;
+      outline: none;
+    }
+    .clay-input:focus {
+      border-color: #2563EB;
     }
     input[type=range] {
       accent-color: #2563EB;
     }
   </style>
 </head>
-<body class="min-h-screen pb-28 px-4 pt-4">
+<body class="min-h-screen pb-32 px-4 pt-3 max-w-lg mx-auto">
 
-  <!-- App Header -->
-  <div class="flex items-center justify-between mb-4 px-1">
+  <!-- Header Bar -->
+  <header class="flex items-center justify-between py-2 mb-4">
     <div class="flex items-center gap-3">
-      <div class="w-11 h-11 rounded-2xl clay-card flex items-center justify-center text-xl bg-blue-50">
+      <div class="w-11 h-11 clay-surface rounded-2xl flex items-center justify-center text-xl">
         🏛️
       </div>
       <div>
-        <h1 class="text-base font-extrabold text-slate-800 leading-tight">Dubai Capital</h1>
-        <p class="text-[11px] text-slate-500 font-semibold">Institutional Off-Plan Desk</p>
+        <h1 class="text-sm font-extrabold text-slate-900 tracking-tight leading-none">DUBAI CAPITAL</h1>
+        <span class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Off-Plan Portfolio Terminal</span>
       </div>
     </div>
-    <div class="flex gap-1 clay-card p-1 rounded-2xl">
-      <button id="curr-aed" onclick="setCurrency('AED')" class="px-3 py-1 rounded-xl text-xs font-bold clay-pill-active transition">AED</button>
-      <button id="curr-usd" onclick="setCurrency('USD')" class="px-3 py-1 rounded-xl text-xs font-semibold text-slate-500 transition">USD</button>
+    
+    <div class="flex items-center gap-2">
+      <!-- Currency Switcher -->
+      <div class="flex clay-surface p-1 rounded-xl">
+        <button id="curr-aed" onclick="setCurrency('AED')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold clay-pill-active transition">AED</button>
+        <button id="curr-usd" onclick="setCurrency('USD')" class="px-2.5 py-1 rounded-lg text-[11px] font-semibold text-slate-500 transition">USD</button>
+      </div>
+      <!-- Global Reset Button -->
+      <button onclick="resetDefaults()" title="Reset All" class="w-8 h-8 clay-surface rounded-xl flex items-center justify-center text-xs font-bold text-slate-600 active:scale-95 transition">
+        ↺
+      </button>
     </div>
-  </div>
+  </header>
 
-  <!-- Main Yield Showcase Card -->
-  <div class="clay-card p-5 mb-5">
+  <!-- Core Metric Showcase (Yield & Appreciation) -->
+  <section class="clay-surface p-5 mb-5">
     <div class="flex justify-between items-start">
       <div>
-        <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Projected Net Yield</span>
+        <p class="text-[10px] uppercase font-bold tracking-widest text-slate-400">Projected Net Yield</p>
         <div class="flex items-baseline gap-2 mt-0.5">
-          <span id="roi-val" class="text-4xl font-extrabold text-blue-600">7.20%</span>
-          <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">Tax-Free</span>
+          <span id="roi-val" class="text-4xl font-extrabold text-blue-600 tracking-tight">7.60%</span>
+          <span class="text-[11px] font-extrabold text-emerald-600 bg-emerald-100/70 border border-emerald-200 px-2 py-0.5 rounded-full">0% TAX</span>
         </div>
       </div>
-      <div id="golden-visa-tag" class="text-right">
-        <!-- Golden Visa Status loaded dynamically -->
+      <div id="golden-visa-tag">
+        <!-- Golden Visa Tag (Dynamic) -->
       </div>
     </div>
 
-    <!-- 2 Column Details -->
     <div class="grid grid-cols-2 gap-3 mt-4 pt-4 border-t border-slate-100">
-      <div class="clay-card-inset p-3">
+      <div class="clay-inset p-3">
         <p class="text-[10px] text-slate-400 font-bold uppercase">Net Annual Rent</p>
-        <p id="net-rent-val" class="text-sm font-extrabold text-slate-800 mt-0.5">AED 108,000</p>
+        <p id="net-rent-val" class="text-base font-extrabold text-slate-900 mt-0.5">AED 114,000</p>
       </div>
-      <div class="clay-card-inset p-3">
-        <p class="text-[10px] text-slate-400 font-bold uppercase">5-Yr Total Growth</p>
-        <p id="total-growth-val" class="text-sm font-extrabold text-emerald-600 mt-0.5">+AED 1,065,000</p>
+      <div class="clay-inset p-3">
+        <p class="text-[10px] text-slate-400 font-bold uppercase">5-Yr Total ROI (Est.)</p>
+        <p id="total-growth-val" class="text-base font-extrabold text-emerald-600 mt-0.5">+AED 1,095,000</p>
       </div>
     </div>
-  </div>
+  </section>
 
-  <!-- Investment Zone Selector -->
-  <div class="mb-5">
-    <p class="text-xs font-extrabold text-slate-700 mb-2 px-1">Select Target Area</p>
-    <div class="flex gap-2.5 overflow-x-auto pb-1 no-scrollbar">
-      <button onclick="setArea('Business Bay', 1500000, 120000, 16000, this)" class="area-btn clay-pill clay-pill-active px-4 py-2 rounded-2xl text-xs font-bold whitespace-nowrap bg-white text-slate-700">Business Bay</button>
-      <button onclick="setArea('Downtown Dubai', 2500000, 190000, 28000, this)" class="area-btn clay-pill px-4 py-2 rounded-2xl text-xs font-bold whitespace-nowrap bg-white text-slate-700">Downtown</button>
-      <button onclick="setArea('Dubai Marina', 1800000, 145000, 20000, this)" class="area-btn clay-pill px-4 py-2 rounded-2xl text-xs font-bold whitespace-nowrap bg-white text-slate-700">Dubai Marina</button>
-      <button onclick="setArea('JVC High-Yield', 850000, 78000, 9500, this)" class="area-btn clay-pill px-4 py-2 rounded-2xl text-xs font-bold whitespace-nowrap bg-white text-slate-700">JVC</button>
+  <!-- Target Investment Zone Selector -->
+  <section class="mb-5">
+    <div class="flex justify-between items-center mb-2 px-1">
+      <span class="text-xs font-extrabold uppercase tracking-wide text-slate-700">Prime Areas</span>
+      <span class="text-[10px] text-slate-400 font-medium">Yield Benchmarks</span>
     </div>
-  </div>
+    <div class="flex gap-2 overflow-x-auto pb-1 no-scrollbar text-xs">
+      <button onclick="setArea('Business Bay', 1500000, 8.2, this)" class="area-btn clay-pill clay-pill-active px-3.5 py-2 rounded-2xl font-bold whitespace-nowrap">Business Bay</button>
+      <button onclick="setArea('Downtown Dubai', 2600000, 6.8, this)" class="area-btn clay-pill px-3.5 py-2 rounded-2xl font-bold whitespace-nowrap text-slate-700">Downtown</button>
+      <button onclick="setArea('Dubai Marina', 1900000, 7.4, this)" class="area-btn clay-pill px-3.5 py-2 rounded-2xl font-bold whitespace-nowrap text-slate-700">Dubai Marina</button>
+      <button onclick="setArea('JVC', 950000, 9.1, this)" class="area-btn clay-pill px-3.5 py-2 rounded-2xl font-bold whitespace-nowrap text-slate-700">JVC (High Cashflow)</button>
+      <button onclick="setArea('Dubai Creek', 1700000, 7.9, this)" class="area-btn clay-pill px-3.5 py-2 rounded-2xl font-bold whitespace-nowrap text-slate-700">Dubai Creek</button>
+    </div>
+  </section>
 
-  <!-- Budget Slider -->
-  <div class="clay-card p-4 mb-5">
+  <!-- Budget Input (Type Any Amount or Slide) -->
+  <section class="clay-surface p-5 mb-5">
     <div class="flex justify-between items-center mb-2">
-      <span class="text-xs font-bold text-slate-500">Acquisition Budget</span>
-      <span id="price-label" class="text-sm font-extrabold text-blue-600">AED 1,500,000</span>
+      <span class="text-xs font-extrabold uppercase tracking-wide text-slate-700">Investment Budget</span>
+      <span class="text-[10px] font-bold text-blue-600">Manual Entry Supported</span>
     </div>
-    <input type="range" id="price-slider" min="600000" max="6000000" step="50000" value="1500000" class="w-full h-2.5 bg-slate-200 rounded-lg cursor-pointer">
-    
-    <div class="mt-3 p-3 clay-card-inset flex items-center justify-between">
+
+    <!-- Direct Numeric Box -->
+    <div class="relative mb-3">
+      <span id="input-curr-prefix" class="absolute left-3.5 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400">AED</span>
+      <input
+        type="number"
+        id="price-input"
+        value="1500000"
+        oninput="handleManualInput(this.value)"
+        class="clay-input w-full pl-12 pr-4 py-3 rounded-2xl text-base font-extrabold text-slate-800"
+      />
+    </div>
+
+    <input
+      type="range"
+      id="price-slider"
+      min="600000"
+      max="8000000"
+      step="50000"
+      value="1500000"
+      oninput="handleSliderInput(this.value)"
+      class="w-full h-2.5 bg-slate-200 rounded-lg cursor-pointer mb-3"
+    />
+
+    <!-- Asset Matched Tag -->
+    <div class="clay-inset p-3 flex items-center justify-between">
       <div>
-        <p class="text-[10px] text-slate-400 font-bold uppercase">What You Can Buy</p>
-        <p id="unit-match-val" class="text-xs font-bold text-slate-800">Prime 1-BHK Luxury Suite</p>
+        <p class="text-[9px] uppercase tracking-wider text-slate-400 font-bold">Matched Unit Allocation</p>
+        <p id="unit-match-val" class="text-xs font-bold text-slate-800 mt-0.5">Prime 1-BHK Canal Suite</p>
       </div>
-      <span class="text-lg">🏡</span>
+      <span class="text-xl">🏙️</span>
     </div>
-  </div>
+  </section>
 
-  <!-- Complete 1% Payment Plan Breakdown -->
-  <div class="clay-card p-5 mb-5">
-    <div class="flex items-center justify-between mb-3">
-      <h3 class="text-xs font-extrabold uppercase tracking-wide text-slate-700">Official 1% Payment Plan</h3>
-      <span class="text-[10px] font-bold bg-amber-100 text-amber-800 px-2.5 py-0.5 rounded-full">Developer Escrow</span>
+  <!-- Payment Plan Structure Selector -->
+  <section class="clay-surface p-5 mb-5">
+    <div class="flex justify-between items-center mb-3">
+      <span class="text-xs font-extrabold uppercase tracking-wide text-slate-700">Payment Structure</span>
+      <span class="text-[10px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full font-bold">Developer Escrow</span>
     </div>
 
-    <div class="space-y-2.5 text-xs">
-      <!-- 20% Down Payment -->
-      <div class="flex justify-between items-center p-2.5 rounded-xl bg-slate-50 border border-slate-100">
-        <div>
-          <span class="font-bold text-slate-800">Booking & Down Payment</span>
-          <p class="text-[10px] text-slate-400">Immediate on reservation (20%)</p>
-        </div>
-        <span id="dp-val" class="font-extrabold text-slate-900">AED 300,000</span>
-      </div>
-
-      <!-- 1% Monthly Installments -->
-      <div class="flex justify-between items-center p-2.5 rounded-xl bg-blue-50/70 border border-blue-100">
-        <div>
-          <span class="font-bold text-blue-900">Monthly Installment (1%)</span>
-          <p class="text-[10px] text-blue-500">Per month during build (40 Months)</p>
-        </div>
-        <span id="monthly-val" class="font-extrabold text-blue-700">AED 15,000/mo</span>
-      </div>
-
-      <!-- 40% On Handover -->
-      <div class="flex justify-between items-center p-2.5 rounded-xl bg-slate-50 border border-slate-100">
-        <div>
-          <span class="font-bold text-slate-800">On Key Handover (40%)</span>
-          <p class="text-[10px] text-slate-400">Mortgageable on completion</p>
-        </div>
-        <span id="handover-val" class="font-extrabold text-slate-900">AED 600,000</span>
-      </div>
-
-      <!-- 4% Govt DLD -->
-      <div class="flex justify-between items-center p-2.5 rounded-xl bg-slate-50 border border-slate-100">
-        <div>
-          <span class="font-bold text-slate-800">Govt DLD Fee (4%)</span>
-          <p class="text-[10px] text-slate-400">Dubai Land Department title deed</p>
-        </div>
-        <span id="dld-val" class="font-extrabold text-slate-600">AED 60,000</span>
-      </div>
+    <!-- Plan Selection Tabs -->
+    <div class="grid grid-cols-3 gap-1.5 p-1 clay-inset rounded-2xl mb-4 text-[11px] font-bold">
+      <button id="plan-btn-1" onclick="setPlan('1pct')" class="py-2 rounded-xl clay-pill-active transition">1% Monthly</button>
+      <button id="plan-btn-2" onclick="setPlan('milestone')" class="py-2 rounded-xl text-slate-500 transition">60/40 Plan</button>
+      <button id="plan-btn-3" onclick="setPlan('phpp')" class="py-2 rounded-xl text-slate-500 transition">Post-Handover</button>
     </div>
-  </div>
 
-  <!-- Trust Guarantee -->
-  <div class="clay-card p-3 mb-6 flex items-center gap-3">
-    <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold text-base">
-      🛡️
+    <!-- Dynamic Schedule Details -->
+    <div class="space-y-2 text-xs" id="schedule-container">
+      <!-- Loaded dynamically via JS -->
     </div>
-    <div>
-      <p class="text-xs font-bold text-slate-800">Strict Privacy Guarantee</p>
-      <p class="text-[10px] text-slate-500">No public broker calls. All inquiries are kept strictly confidential.</p>
-    </div>
-  </div>
+  </section>
 
-  <!-- Sticky Bottom Bar -->
-  <div class="fixed bottom-0 left-0 right-0 p-3 bg-white/90 backdrop-blur-md border-t border-slate-200 z-50">
-    <div class="max-w-md mx-auto" id="cta-container">
-      <button onclick="requestDeck()" class="clay-btn-gold w-full py-4 px-4 font-extrabold text-sm flex items-center justify-center gap-2">
-        <span>⚡ Get Official Project Deck & Payment Plan</span>
+  <!-- Investor Action & Sharing Hub -->
+  <section class="flex gap-2.5 mb-5">
+    <button onclick="copySummary()" class="clay-surface w-1/2 py-3 px-3 rounded-2xl text-xs font-bold text-slate-700 flex items-center justify-center gap-1.5 active:scale-95 transition">
+      <span>📋 Copy Breakdown</span>
+    </button>
+    <button onclick="resetDefaults()" class="clay-surface w-1/2 py-3 px-3 rounded-2xl text-xs font-bold text-slate-700 flex items-center justify-center gap-1.5 active:scale-95 transition">
+      <span>↺ New Calculation</span>
+    </button>
+  </section>
+
+  <!-- Floating Sticky Action Bar -->
+  <div class="fixed bottom-0 left-0 right-0 p-3.5 bg-white/90 backdrop-blur-md border-t border-slate-200 z-50">
+    <div class="max-w-lg mx-auto" id="cta-container">
+      <button onclick="submitRequest()" class="clay-btn-gold w-full py-4 px-4 font-extrabold text-sm rounded-2xl flex items-center justify-center gap-2">
+        <span>⚡ Request Verified Allocation & Dossier</span>
       </button>
     </div>
   </div>
@@ -197,117 +217,238 @@
       tg.expand();
     }
 
+    // State Variables
     let currency = 'AED';
     const USD_RATE = 0.2723;
+    let basePrice = 1500000;
+    let currentYieldRate = 8.2; // percentage
+    let currentPlan = '1pct';   // '1pct', 'milestone', 'phpp'
 
-    let price = 1500000;
-    let rent = 120000;
-    let service = 16000;
-
+    const priceInput = document.getElementById('price-input');
     const priceSlider = document.getElementById('price-slider');
 
     function setCurrency(c) {
       currency = c;
-      const aedBtn = document.getElementById('curr-aed');
-      const usdBtn = document.getElementById('curr-usd');
-
-      if (c === 'AED') {
-        aedBtn.className = "px-3 py-1 rounded-xl text-xs font-bold clay-pill-active transition";
-        usdBtn.className = "px-3 py-1 rounded-xl text-xs font-semibold text-slate-500 transition";
-      } else {
-        usdBtn.className = "px-3 py-1 rounded-xl text-xs font-bold clay-pill-active transition";
-        aedBtn.className = "px-3 py-1 rounded-xl text-xs font-semibold text-slate-500 transition";
-      }
-      render();
+      document.getElementById('curr-aed').className = c === 'AED' ? "px-2.5 py-1 rounded-lg text-[11px] font-bold clay-pill-active transition" : "px-2.5 py-1 rounded-lg text-[11px] font-semibold text-slate-500 transition";
+      document.getElementById('curr-usd').className = c === 'USD' ? "px-2.5 py-1 rounded-lg text-[11px] font-bold clay-pill-active transition" : "px-2.5 py-1 rounded-lg text-[11px] font-semibold text-slate-500 transition";
+      document.getElementById('input-curr-prefix').innerText = c;
+      updateDisplay();
     }
 
-    function setArea(name, p, r, s, btn) {
-      price = p;
-      rent = r;
-      service = s;
-      priceSlider.value = p;
+    function setArea(name, defaultPrice, yieldRate, btn) {
+      basePrice = defaultPrice;
+      currentYieldRate = yieldRate;
+      priceInput.value = basePrice;
+      priceSlider.value = Math.min(basePrice, 8000000);
 
-      document.querySelectorAll('.area-btn').forEach(b => b.classList.remove('clay-pill-active'));
+      document.querySelectorAll('.area-btn').forEach(b => {
+        b.classList.remove('clay-pill-active');
+        b.classList.add('text-slate-700');
+      });
       btn.classList.add('clay-pill-active');
+      btn.classList.remove('text-slate-700');
 
       if (tg?.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
-      render();
+      updateDisplay();
     }
 
-    function formatVal(aedVal) {
+    function handleSliderInput(val) {
+      basePrice = Number(val);
+      priceInput.value = basePrice;
+      updateDisplay();
+    }
+
+    function handleManualInput(val) {
+      basePrice = Math.max(100000, Number(val) || 0);
+      priceSlider.value = Math.min(basePrice, 8000000);
+      updateDisplay();
+    }
+
+    function setPlan(plan) {
+      currentPlan = plan;
+      const b1 = document.getElementById('plan-btn-1');
+      const b2 = document.getElementById('plan-btn-2');
+      const b3 = document.getElementById('plan-btn-3');
+
+      [b1, b2, b3].forEach(b => {
+        b.className = "py-2 rounded-xl text-slate-500 transition";
+      });
+
+      if (plan === '1pct') b1.className = "py-2 rounded-xl clay-pill-active transition";
+      if (plan === 'milestone') b2.className = "py-2 rounded-xl clay-pill-active transition";
+      if (plan === 'phpp') b3.className = "py-2 rounded-xl clay-pill-active transition";
+
+      if (tg?.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+      updateDisplay();
+    }
+
+    function formatVal(aedAmount) {
       if (currency === 'AED') {
-        return 'AED ' + Math.round(aedVal).toLocaleString();
+        return 'AED ' + Math.round(aedAmount).toLocaleString();
       } else {
-        return '$' + Math.round(aedVal * USD_RATE).toLocaleString();
+        return '$' + Math.round(aedAmount * USD_RATE).toLocaleString();
       }
     }
 
-    function render() {
-      price = Number(priceSlider.value);
-      // Auto estimate rent and maintenance based on price
-      const estimatedRent = price * 0.08;
-      const estimatedService = price * 0.01;
-      const netRent = estimatedRent - estimatedService;
-      const roi = ((netRent / price) * 100).toFixed(2);
-      const totalGrowth = Math.round((price * 0.35) + (netRent * 5));
+    function updateDisplay() {
+      // 1. Calculations
+      const annualRent = basePrice * (currentYieldRate / 100);
+      const serviceCharge = basePrice * 0.011; // ~1.1% maintenance avg
+      const netRent = Math.max(0, annualRent - serviceCharge);
+      const netYield = ((netRent / basePrice) * 100).toFixed(2);
+      const fiveYearGrowth = Math.round((basePrice * 0.35) + (netRent * 5));
 
-      // Update Top Metrics
-      document.getElementById('roi-val').innerText = roi + '%';
-      document.getElementById('price-label').innerText = formatVal(price);
+      // 2. Metrics Output
+      document.getElementById('roi-val').innerText = netYield + '%';
       document.getElementById('net-rent-val').innerText = formatVal(netRent);
-      document.getElementById('total-growth-val').innerText = '+' + formatVal(totalGrowth);
+      document.getElementById('total-growth-val').innerText = '+' + formatVal(fiveYearGrowth);
 
-      // What You Can Buy Logic
-      const unitEl = document.getElementById('unit-match-val');
-      if (price < 1100000) {
-        unitEl.innerText = "Luxury Smart Studio (High Cash-Flow)";
-      } else if (price < 2000000) {
-        unitEl.innerText = "Prime 1-BHK Residence (Waterfront / Canal)";
-      } else if (price < 3500000) {
-        unitEl.innerText = "Spacious 2-BHK + Maid (Golden Visa)";
-      } else {
-        unitEl.innerText = "Ultra-Luxury Penthouse / Sky Villa";
-      }
-
-      // Golden Visa Badge
-      const gvTag = document.getElementById('golden-visa-tag');
-      if (price >= 2000000) {
-        gvTag.innerHTML = `
-          <span class="text-[10px] font-extrabold bg-amber-100 text-amber-800 border border-amber-300 px-2 py-1 rounded-xl inline-flex items-center gap-1">
+      // 3. Golden Visa Badge Status
+      const gvBox = document.getElementById('golden-visa-tag');
+      if (basePrice >= 2000000) {
+        gvBox.innerHTML = `
+          <span class="text-[10px] font-extrabold bg-amber-100 text-amber-900 border border-amber-300 px-2.5 py-1 rounded-xl inline-flex items-center gap-1">
             ⭐ 10-Yr Golden Visa
           </span>
         `;
       } else {
-        const remaining = 2000000 - price;
-        gvTag.innerHTML = `
+        const diff = 2000000 - basePrice;
+        gvBox.innerHTML = `
           <span class="text-[10px] font-semibold text-slate-400">
-            ${formatVal(remaining)} to Golden Visa
+            ${formatVal(diff)} to Golden Visa
           </span>
         `;
       }
 
-      // Payment Plan Math
-      document.getElementById('dp-val').innerText = formatVal(price * 0.20);
-      document.getElementById('monthly-val').innerText = formatVal(price * 0.01) + '/mo';
-      document.getElementById('handover-val').innerText = formatVal(price * 0.40);
-      document.getElementById('dld-val').innerText = formatVal(price * 0.04);
+      // 4. Unit Allocation Match
+      const unitEl = document.getElementById('unit-match-val');
+      if (basePrice < 1100000) {
+        unitEl.innerText = "High-Cashflow Smart Studio";
+      } else if (basePrice < 2100000) {
+        unitEl.innerText = "Prime 1-BHK Residence (Waterfront / Canal)";
+      } else if (basePrice < 3800000) {
+        unitEl.innerText = "Luxury 2-BHK + Maid (Golden Visa Tier)";
+      } else {
+        unitEl.innerText = "Ultra-Prime 3/4-BHK Penthouse Suite";
+      }
+
+      // 5. Payment Schedule Rendering
+      renderPaymentSchedule();
     }
 
-    priceSlider.addEventListener('input', () => {
-      render();
-    });
+    function renderPaymentSchedule() {
+      const container = document.getElementById('schedule-container');
+      const dldFee = basePrice * 0.04;
 
-    function requestDeck() {
+      if (currentPlan === '1pct') {
+        const downPayment = basePrice * 0.20;
+        const monthly = basePrice * 0.01;
+        const handover = basePrice * 0.40;
+
+        container.innerHTML = `
+          <div class="flex justify-between items-center p-2.5 rounded-xl bg-slate-50 border border-slate-100">
+            <div><span class="font-bold text-slate-800">Reservation & Down Payment (20%)</span><p class="text-[10px] text-slate-400">Immediate on booking</p></div>
+            <span class="font-extrabold text-slate-900">${formatVal(downPayment)}</span>
+          </div>
+          <div class="flex justify-between items-center p-2.5 rounded-xl bg-blue-50/70 border border-blue-100">
+            <div><span class="font-bold text-blue-900">Monthly Installment (1%)</span><p class="text-[10px] text-blue-600">Per month (40 Months duration)</p></div>
+            <span class="font-extrabold text-blue-700">${formatVal(monthly)}/mo</span>
+          </div>
+          <div class="flex justify-between items-center p-2.5 rounded-xl bg-slate-50 border border-slate-100">
+            <div><span class="font-bold text-slate-800">Key Handover Completion (40%)</span><p class="text-[10px] text-slate-400">Q4 2026 / Mortgage ready</p></div>
+            <span class="font-extrabold text-slate-900">${formatVal(handover)}</span>
+          </div>
+          <div class="flex justify-between items-center p-2.5 rounded-xl bg-slate-50 border border-slate-100">
+            <div><span class="font-bold text-slate-800">Govt Registration (4% DLD)</span><p class="text-[10px] text-slate-400">Land Department Title fee</p></div>
+            <span class="font-extrabold text-slate-600">${formatVal(dldFee)}</span>
+          </div>
+        `;
+      } else if (currentPlan === 'milestone') {
+        const dp = basePrice * 0.20;
+        const duringBuild = basePrice * 0.40;
+        const handover = basePrice * 0.40;
+
+        container.innerHTML = `
+          <div class="flex justify-between items-center p-2.5 rounded-xl bg-slate-50 border border-slate-100">
+            <div><span class="font-bold text-slate-800">Initial Down Payment (20%)</span><p class="text-[10px] text-slate-400">On contract signing</p></div>
+            <span class="font-extrabold text-slate-900">${formatVal(dp)}</span>
+          </div>
+          <div class="flex justify-between items-center p-2.5 rounded-xl bg-blue-50/70 border border-blue-100">
+            <div><span class="font-bold text-blue-900">During Construction (40%)</span><p class="text-[10px] text-blue-600">Split into 4 milestones of 10%</p></div>
+            <span class="font-extrabold text-blue-700">${formatVal(duringBuild)}</span>
+          </div>
+          <div class="flex justify-between items-center p-2.5 rounded-xl bg-slate-50 border border-slate-100">
+            <div><span class="font-bold text-slate-800">Final Handover Balance (40%)</span><p class="text-[10px] text-slate-400">At physical handover</p></div>
+            <span class="font-extrabold text-slate-900">${formatVal(handover)}</span>
+          </div>
+        `;
+      } else {
+        const dp = basePrice * 0.20;
+        const duringBuild = basePrice * 0.30;
+        const postHandover = basePrice * 0.50;
+
+        container.innerHTML = `
+          <div class="flex justify-between items-center p-2.5 rounded-xl bg-slate-50 border border-slate-100">
+            <div><span class="font-bold text-slate-800">Down Payment (20%)</span><p class="text-[10px] text-slate-400">To secure inventory</p></div>
+            <span class="font-extrabold text-slate-900">${formatVal(dp)}</span>
+          </div>
+          <div class="flex justify-between items-center p-2.5 rounded-xl bg-slate-50 border border-slate-100">
+            <div><span class="font-bold text-slate-800">During Construction (30%)</span><p class="text-[10px] text-slate-400">Linked to progress</p></div>
+            <span class="font-extrabold text-slate-900">${formatVal(duringBuild)}</span>
+          </div>
+          <div class="flex justify-between items-center p-2.5 rounded-xl bg-emerald-50/70 border border-emerald-100">
+            <div><span class="font-bold text-emerald-900">Post-Handover Plan (50%)</span><p class="text-[10px] text-emerald-600">Funded via rental yield over 3 years</p></div>
+            <span class="font-extrabold text-emerald-700">${formatVal(postHandover)}</span>
+          </div>
+        `;
+      }
+    }
+
+    function resetDefaults() {
+      basePrice = 1500000;
+      currentYieldRate = 8.2;
+      currentPlan = '1pct';
+      priceInput.value = basePrice;
+      priceSlider.value = basePrice;
+      setPlan('1pct');
+
+      // Reset CTA container if user submitted previously
+      document.getElementById('cta-container').innerHTML = `
+        <button onclick="submitRequest()" class="clay-btn-gold w-full py-4 px-4 font-extrabold text-sm rounded-2xl flex items-center justify-center gap-2">
+          <span>⚡ Request Verified Allocation & Dossier</span>
+        </button>
+      `;
+
+      if (tg?.HapticFeedback) tg.HapticFeedback.notificationOccurred('warning');
+      updateDisplay();
+    }
+
+    function copySummary() {
+      const summaryText = `Dubai Off-Plan Investment Summary:
+Budget: ${formatVal(basePrice)}
+Projected Yield: ${document.getElementById('roi-val').innerText} (Tax-Free)
+Net Annual Rent: ${document.getElementById('net-rent-val').innerText}
+Allocation: ${document.getElementById('unit-match-val').innerText}
+Payment Model: ${currentPlan.toUpperCase()}`;
+
+      navigator.clipboard.writeText(summaryText);
+      if (tg?.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+      alert("Breakdown copied to clipboard!");
+    }
+
+    function submitRequest() {
       if (tg?.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
       document.getElementById('cta-container').innerHTML = `
-        <div class="clay-card-inset p-3 text-center border border-emerald-300 bg-emerald-50">
-          <p class="text-xs font-extrabold text-emerald-800">✓ Confidential Request Received</p>
-          <p class="text-[10px] text-slate-600 mt-0.5">The verified 1% payment plan PDF is dispatched to your Telegram chat.</p>
+        <div class="clay-surface p-3.5 text-center border border-emerald-300">
+          <p class="text-xs font-extrabold text-emerald-700">✓ Request Dispatched Successfully</p>
+          <p class="text-[10px] text-slate-500 mt-0.5">The matching allocation deck has been logged to your private session.</p>
+          <button onclick="resetDefaults()" class="mt-2 text-xs font-extrabold text-blue-600 underline">↺ Adjust Budget / Calculate Another</button>
         </div>
       `;
     }
 
-    render();
+    // Initialize
+    updateDisplay();
   </script>
 </body>
 </html>
