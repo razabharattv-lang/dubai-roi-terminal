@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <!-- Monetag Official Telegram Mini App SDK -->
+  <script src='//libtl.com/sdk.js' data-zone='12087252' data-sdk='show_12087252'></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>YIELDEX — Institutional Capital Terminal</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -60,7 +62,7 @@
 <body class="min-h-screen pb-36 px-4 pt-3 max-w-lg mx-auto">
 
   <!-- Floating Notification Toast -->
-  <div id="toast-banner" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-slate-900 text-emerald-400 border border-emerald-500/40 px-4 py-2.5 rounded-2xl shadow-2xl text-xs font-extrabold tracking-wide transition-all duration-300 opacity-0 pointer-events-none">
+  <div id="toast-banner" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-slate-900 text-emerald-400 border border-emerald-500/40 px-4 py-2.5 rounded-2xl shadow-2xl text-xs font-extrabold tracking-wide transition-all duration-300 opacity-0 pointer-events-none whitespace-nowrap">
     ✓ Action Completed
   </div>
 
@@ -129,7 +131,7 @@
     </div>
   </section>
 
-  <!-- Developer Selection -->
+  <!-- 1. Developer Selection -->
   <section class="clay-surface p-4 mb-4">
     <div class="flex justify-between items-center mb-2.5">
       <span class="text-xs font-extrabold uppercase tracking-wide text-slate-800">1. Developer Brand & Inventory</span>
@@ -188,7 +190,7 @@
     </div>
   </section>
 
-  <!-- Location -->
+  <!-- 2. Location -->
   <section class="mb-4">
     <div class="flex justify-between items-center mb-2 px-1">
       <span class="text-xs font-extrabold uppercase tracking-wide text-slate-700">2. Target Location</span>
@@ -204,7 +206,7 @@
     </div>
   </section>
 
-  <!-- Acquisition Budget -->
+  <!-- 3. Acquisition Budget -->
   <section class="clay-surface p-5 mb-4">
     <div class="flex justify-between items-center mb-2">
       <span class="text-xs font-extrabold uppercase tracking-wide text-slate-700">3. Acquisition Budget</span>
@@ -240,10 +242,139 @@
     </div>
   </section>
 
-  <!-- Payment Structure & Discounts -->
+  <!-- 4. Property Specifications & Area Size (Sq.Ft / Gaj / Sq.M) -->
+  <section class="clay-surface p-5 mb-4">
+    <div class="flex justify-between items-center mb-2.5">
+      <span class="text-xs font-extrabold uppercase tracking-wide text-slate-800">4. Property & Plot Area Details</span>
+      <span class="text-[10px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full">Sq.Ft • Gaj • Sq.M</span>
+    </div>
+
+    <!-- Unit Configuration Buttons -->
+    <label class="text-[10px] font-bold text-slate-500 uppercase block mb-1.5">Select Residence / Plot Type</label>
+    <div class="grid grid-cols-3 gap-1.5 text-[11px] font-bold mb-3.5">
+      <button type="button" onclick="selectUnitConfig('Studio Suite', 450, 'Studio • 1 Bath')" class="unit-btn py-2 px-1.5 rounded-xl text-center transition btn-inactive" data-unit="Studio Suite">
+        🛋️ Studio
+      </button>
+      <button type="button" onclick="selectUnitConfig('1 BHK Apartment', 850, '1 Bed • 2 Bath')" class="unit-btn py-2 px-1.5 rounded-xl text-center transition btn-active" data-unit="1 BHK Apartment">
+        🏠 1 BHK
+      </button>
+      <button type="button" onclick="selectUnitConfig('2 BHK Residence', 1350, '2 Bed • 3 Bath')" class="unit-btn py-2 px-1.5 rounded-xl text-center transition btn-inactive" data-unit="2 BHK Residence">
+        🏢 2 BHK
+      </button>
+      <button type="button" onclick="selectUnitConfig('3 BHK Sky Suite', 2100, '3 Bed + Maid • 4 Bath')" class="unit-btn py-2 px-1.5 rounded-xl text-center transition btn-inactive" data-unit="3 BHK Sky Suite">
+        🌆 3 BHK
+      </button>
+      <button type="button" onclick="selectUnitConfig('4 BHK Luxury Villa', 3600, '4 Bed Villa + Private Pool')" class="unit-btn py-2 px-1.5 rounded-xl text-center transition btn-inactive" data-unit="4 BHK Luxury Villa">
+        🏡 4 BHK Villa
+      </button>
+      <button type="button" onclick="selectUnitConfig('Prime Plot / Penthouse', 5400, 'Custom Plot / Penthouse')" class="unit-btn py-2 px-1.5 rounded-xl text-center transition btn-inactive" data-unit="Prime Plot / Penthouse">
+        📐 Plot / Penth.
+      </button>
+    </div>
+
+    <!-- Area Measurement Unit Switcher (Sq.Ft | Gaj | Sq.M) -->
+    <div class="flex items-center justify-between mb-1.5">
+      <span class="text-[10px] font-bold text-slate-500 uppercase">Area / Plot Size Input</span>
+      <span id="area-unit-hint" class="text-[10px] font-bold text-emerald-600">1 Gaj (Sq.Yd) = 9 Sq.Ft</span>
+    </div>
+
+    <div class="grid grid-cols-3 gap-1.5 p-1 clay-inset rounded-2xl mb-3 text-[11px] font-bold">
+      <button type="button" onclick="setAreaUnit('SQFT')" class="aunit-btn py-1.5 rounded-xl transition btn-active" data-aunit="SQFT">Sq.Ft (वर्ग फुट)</button>
+      <button type="button" onclick="setAreaUnit('GAJ')" class="aunit-btn py-1.5 rounded-xl transition btn-inactive" data-aunit="GAJ">Gaj / गज (Sq.Yd)</button>
+      <button type="button" onclick="setAreaUnit('SQM')" class="aunit-btn py-1.5 rounded-xl transition btn-inactive" data-aunit="SQM">Sq.M (मीटर)</button>
+    </div>
+
+    <!-- Manual Area Size Input & Slider -->
+    <div class="relative mb-2.5">
+      <input
+        type="number"
+        id="area-size-input"
+        value="850"
+        step="any"
+        class="clay-input w-full pl-4 pr-24 py-2.5 rounded-2xl text-sm font-extrabold text-slate-800"
+      />
+      <span id="area-input-suffix" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-xs font-extrabold text-blue-600">Sq.Ft</span>
+    </div>
+
+    <input
+      type="range"
+      id="area-size-slider"
+      min="300"
+      max="10000"
+      step="10"
+      value="850"
+      class="w-full h-2 bg-slate-200 rounded-lg cursor-pointer mb-3"
+    />
+
+    <!-- Live Multi-Unit Area Conversion Box -->
+    <div class="clay-inset p-3 mb-3">
+      <div class="flex justify-between items-center text-[11px] font-extrabold text-slate-800 mb-1.5">
+        <span id="conv-sqft-val">850 Sq.Ft</span>
+        <span class="text-slate-300">•</span>
+        <span id="conv-gaj-val" class="text-blue-600">94.4 Gaj (Sq.Yd)</span>
+        <span class="text-slate-300">•</span>
+        <span id="conv-sqm-val">79.0 Sq.M</span>
+      </div>
+      <div class="flex justify-between items-center pt-1.5 border-t border-slate-200/80 text-[10px] font-bold text-slate-500">
+        <span>Rate/Sq.Ft: <strong id="rate-per-sqft" class="text-slate-800">$368</strong></span>
+        <span>Rate/Gaj (गज): <strong id="rate-per-gaj" class="text-emerald-600">$3,316</strong></span>
+      </div>
+    </div>
+
+    <!-- Additional Home Attributes (Rooms, View, Furnishing, Handover) -->
+    <div class="grid grid-cols-2 gap-2.5 text-xs">
+      <div class="clay-inset p-2.5">
+        <label class="text-[9px] font-bold text-slate-500 uppercase">Rooms & Bath Layout</label>
+        <select id="spec-layout" onchange="renderAll()" class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1.5 font-bold text-slate-800 text-[11px] mt-1 outline-none">
+          <option value="Studio • 1 Bath">Studio • 1 Bath</option>
+          <option value="1 Bed • 2 Bath" selected>1 Bed • 2 Bath</option>
+          <option value="1 Bed + Study • 2 Bath">1 Bed + Study • 2 Bath</option>
+          <option value="2 Bed • 3 Bath">2 Bed • 3 Bath</option>
+          <option value="2 Bed + Maid • 3 Bath">2 Bed + Maid • 3 Bath</option>
+          <option value="3 Bed + Maid • 4 Bath">3 Bed + Maid • 4 Bath</option>
+          <option value="4 Bed Villa + Private Pool">4 Bed Villa + Pool</option>
+          <option value="Custom Plot / Penthouse">Custom Plot / Penth.</option>
+        </select>
+      </div>
+
+      <div class="clay-inset p-2.5">
+        <label class="text-[9px] font-bold text-slate-500 uppercase">Primary View / Facing</label>
+        <select id="spec-view" onchange="renderAll()" class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1.5 font-bold text-slate-800 text-[11px] mt-1 outline-none">
+          <option value="Dubai Canal & Waterfront" selected>Canal & Waterfront</option>
+          <option value="Burj Khalifa & Downtown Skyline">Burj Khalifa View</option>
+          <option value="Marina Yacht & Arabian Sea">Marina & Sea View</option>
+          <option value="Crystal Lagoon & Boulevard">Crystal Lagoon View</option>
+          <option value="Golf Course & Lush Park">Golf Course / Park</option>
+        </select>
+      </div>
+
+      <div class="clay-inset p-2.5">
+        <label class="text-[9px] font-bold text-slate-500 uppercase">Furnishing & Parking</label>
+        <select id="spec-furnishing" onchange="renderAll()" class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1.5 font-bold text-slate-800 text-[11px] mt-1 outline-none">
+          <option value="Fully Furnished + 1 Covered Parking" selected>Fully Furnished + 1 Park</option>
+          <option value="Kitchen Equipped + 1 Covered Parking">Kitchen Equipped + 1 Park</option>
+          <option value="Bespoke Designer + 2 Covered Parking">Luxury Bespoke + 2 Park</option>
+          <option value="Freehold Villa Plot (G+2 Approved)">Freehold Plot (G+2)</option>
+        </select>
+      </div>
+
+      <div class="clay-inset p-2.5">
+        <label class="text-[9px] font-bold text-slate-500 uppercase">Handover / Possession</label>
+        <select id="spec-handover" onchange="renderAll()" class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1.5 font-bold text-slate-800 text-[11px] mt-1 outline-none">
+          <option value="Q4 2026 (Fast-Track)">Q4 2026 (Fast-Track)</option>
+          <option value="Q2 2027" selected>Q2 2027</option>
+          <option value="Q4 2027">Q4 2027</option>
+          <option value="Q4 2028">Q4 2028</option>
+          <option value="Ready to Move (Immediate)">Ready to Move</option>
+        </select>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Payment Structure & Discounts -->
   <section class="clay-surface p-5 mb-4">
     <div class="flex justify-between items-center mb-3">
-      <span class="text-xs font-extrabold uppercase tracking-wide text-slate-700">4. Payment Structure & Incentives</span>
+      <span class="text-xs font-extrabold uppercase tracking-wide text-slate-700">5. Payment Structure & Incentives</span>
       <span id="split-total-badge" class="text-[10px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full font-bold">100% Allocation ✓</span>
     </div>
 
@@ -323,6 +454,7 @@
   <script>
     const WHATSAPP_NUMBER = "919897716178";
 
+    // Initialize Telegram Mini App
     try {
       if (window.Telegram && window.Telegram.WebApp) {
         window.Telegram.WebApp.ready();
@@ -330,6 +462,80 @@
       }
     } catch (e) {}
 
+    // ==========================================
+    // MONETAG AD ENGINE (ALL 3 FORMATS ACTIVE)
+    // ==========================================
+    function getMonetagSdk() {
+      if (typeof window.show_12087252 === 'function') return window.show_12087252;
+      if (typeof window.show_12887252 === 'function') return window.show_12887252;
+      return null;
+    }
+
+    // 1. In-App Interstitial (Auto-runs with smart retry when SDK finishes loading)
+    let _inAppInitialized = false;
+    function initInAppInterstitial(attempt = 1) {
+      if (_inAppInitialized) return;
+      try {
+        const sdk = getMonetagSdk();
+        if (sdk) {
+          _inAppInitialized = true;
+          sdk({
+            type: 'inApp',
+            inAppSettings: {
+              frequency: 2,
+              capping: 0.1,
+              interval: 30,
+              timeout: 5,
+              everyPage: false
+            }
+          });
+          return;
+        }
+      } catch (e) {}
+      if (attempt < 10) {
+        setTimeout(() => initInAppInterstitial(attempt + 1), 1000);
+      }
+    }
+
+    // 2. Rewarded Interstitial (Triggered on Memo Generation)
+    function triggerRewardedInterstitial(onComplete) {
+      try {
+        const sdk = getMonetagSdk();
+        if (sdk) {
+          sdk().then(() => {
+            if (typeof onComplete === 'function') onComplete();
+          }).catch(() => {
+            if (typeof onComplete === 'function') onComplete();
+          });
+          return;
+        }
+      } catch (e) {}
+      if (typeof onComplete === 'function') onComplete();
+    }
+
+    // 3. Rewarded Popup (Triggered on Copy Memo)
+    function triggerRewardedPopup(onComplete) {
+      try {
+        const sdk = getMonetagSdk();
+        if (sdk) {
+          sdk('pop').then(() => {
+            if (typeof onComplete === 'function') onComplete();
+          }).catch(() => {
+            if (typeof onComplete === 'function') onComplete();
+          });
+          return;
+        }
+      } catch (e) {}
+      if (typeof onComplete === 'function') onComplete();
+    }
+
+    window.addEventListener('load', () => {
+      setTimeout(() => initInAppInterstitial(1), 1000);
+    });
+
+    // ==========================================
+    // UTILITIES & HAPTICS
+    // ==========================================
     function showToast(message) {
       const banner = document.getElementById('toast-banner');
       banner.innerText = message;
@@ -339,7 +545,7 @@
       window._toastTimer = setTimeout(() => {
         banner.classList.remove('opacity-100');
         banner.classList.add('opacity-0');
-      }, 2400);
+      }, 2500);
     }
 
     function triggerHaptic(type = 'light') {
@@ -393,16 +599,26 @@
       window.open(url, '_blank');
     }
 
+    // ==========================================
+    // CORE MARKET DATA & STATE
+    // ==========================================
     const RATES = { AED: 1.0, USD: 0.2723, GBP: 0.2105, EUR: 0.2469 };
     const SYMBOLS = { AED: 'AED ', USD: '$', GBP: '£', EUR: '€' };
 
+    // 1 Gaj (Sq. Yard) = 9 Sq.Ft | 1 Sq. Meter = 10.7639 Sq.Ft
+    const AREA_FACTORS = {
+      SQFT: 1,
+      GAJ: 9,
+      SQM: 10.7639
+    };
+
     const DEVELOPERS = {
-      'Binghatti': { priceAED: 1150000, area: 'Business Bay', yield: 8.8, plan: '1pct', tag: 'Fast-Track Delivery', focus: '1% Monthly Cashflow Strategy' },
-      'Emaar': { priceAED: 2500000, area: 'Downtown Dubai', yield: 7.2, plan: 'milestone', tag: 'Global Tier-1 / Sovereign', focus: 'Highest Capital Growth & Iconic Landmarks' },
-      'Sobha': { priceAED: 1850000, area: 'Sobha Hartland', yield: 7.9, plan: 'milestone', tag: 'In-House Master Quality', focus: 'Lagoon Waterfront Luxury Suites' },
-      'Danube': { priceAED: 890000, area: 'JVC', yield: 9.3, plan: '1pct', tag: 'Official 1% Monthly Desk', focus: 'Fully Furnished Maximum Rental Yield' },
-      'Damac': { priceAED: 1950000, area: 'Dubai Marina', yield: 7.8, plan: 'milestone', tag: 'Branded Lifestyle Luxury', focus: 'Cavalli / de GRISOGONO Residences' },
-      'Sky Villa': { priceAED: 4500000, area: 'Palm Jumeirah', yield: 6.9, plan: 'phpp', tag: 'Ultra-Prime Trophy Assets', focus: 'Private Waterfront Sky Villas' }
+      'Binghatti': { priceAED: 1150000, area: 'Business Bay', yield: 8.8, plan: '1pct', tag: 'Fast-Track Delivery', focus: '1% Monthly Cashflow Strategy', sqft: 850, unit: '1 BHK Apartment', layout: '1 Bed • 2 Bath' },
+      'Emaar': { priceAED: 2500000, area: 'Downtown Dubai', yield: 7.2, plan: 'milestone', tag: 'Global Tier-1 / Sovereign', focus: 'Highest Capital Growth & Iconic Landmarks', sqft: 1350, unit: '2 BHK Residence', layout: '2 Bed • 3 Bath' },
+      'Sobha': { priceAED: 1850000, area: 'Sobha Hartland', yield: 7.9, plan: 'milestone', tag: 'In-House Master Quality', focus: 'Lagoon Waterfront Luxury Suites', sqft: 1100, unit: '2 BHK Residence', layout: '2 Bed • 3 Bath' },
+      'Danube': { priceAED: 890000, area: 'JVC', yield: 9.3, plan: '1pct', tag: 'Official 1% Monthly Desk', focus: 'Fully Furnished Maximum Rental Yield', sqft: 520, unit: 'Studio Suite', layout: 'Studio • 1 Bath' },
+      'Damac': { priceAED: 1950000, area: 'Dubai Marina', yield: 7.8, plan: 'milestone', tag: 'Branded Lifestyle Luxury', focus: 'Cavalli / de GRISOGONO Residences', sqft: 1250, unit: '2 BHK Residence', layout: '2 Bed • 3 Bath' },
+      'Sky Villa': { priceAED: 4500000, area: 'Palm Jumeirah', yield: 6.9, plan: 'phpp', tag: 'Ultra-Prime Trophy Assets', focus: 'Private Waterfront Sky Villas', sqft: 3600, unit: '4 BHK Luxury Villa', layout: '4 Bed Villa + Private Pool' }
     };
 
     const LOCATIONS = {
@@ -421,8 +637,15 @@
     let currentYield = 8.8;
     let baseAED = 1150000;
 
+    // Property & Area State
+    let currentUnitType = '1 BHK Apartment';
+    let currentAreaUnit = 'SQFT'; // 'SQFT' | 'GAJ' | 'SQM'
+    let baseSqFt = 850;
+
     const priceInput = document.getElementById('price-input');
     const priceSlider = document.getElementById('price-slider');
+    const areaSizeInput = document.getElementById('area-size-input');
+    const areaSizeSlider = document.getElementById('area-size-slider');
 
     function highlightGroup(selector, activeAttr, activeVal) {
       document.querySelectorAll(selector).forEach(btn => {
@@ -436,6 +659,9 @@
       });
     }
 
+    // ==========================================
+    // CURRENCY, DEVELOPER & LOCATION HANDLERS
+    // ==========================================
     function setCurrency(curr) {
       currentCurrency = curr;
       highlightGroup('.curr-btn', 'data-curr', curr);
@@ -459,17 +685,21 @@
       currentArea = data.area;
       currentYield = data.yield;
       currentPlan = data.plan;
+      baseSqFt = data.sqft;
+      currentUnitType = data.unit;
 
       highlightGroup('.dev-btn', 'data-dev', devName);
       highlightGroup('.area-btn', 'data-area', currentArea);
+      highlightGroup('.unit-btn', 'data-unit', currentUnitType);
 
       document.getElementById('dev-tag').innerText = data.tag;
       document.getElementById('dev-focus-text').innerText = data.focus;
       document.getElementById('selected-loc-label').innerText = currentArea;
+      document.getElementById('spec-layout').value = data.layout;
 
-      applyPresetPlan(currentPlan);
       syncSliderAndInput();
-      renderAll();
+      syncAreaSliderAndInput();
+      applyPresetPlan(currentPlan);
     }
 
     function selectArea(areaName) {
@@ -486,6 +716,75 @@
       renderAll();
     }
 
+    // ==========================================
+    // PROPERTY & PLOT AREA (SQFT / GAJ / SQM)
+    // ==========================================
+    function selectUnitConfig(unitName, defaultSqFt, defaultLayout) {
+      currentUnitType = unitName;
+      baseSqFt = defaultSqFt;
+      highlightGroup('.unit-btn', 'data-unit', unitName);
+
+      const layoutSelect = document.getElementById('spec-layout');
+      layoutSelect.value = defaultLayout;
+
+      triggerHaptic('light');
+      syncAreaSliderAndInput();
+      renderAll();
+    }
+
+    function setAreaUnit(unitKey) {
+      currentAreaUnit = unitKey;
+      highlightGroup('.aunit-btn', 'data-aunit', unitKey);
+
+      const suffixMap = { SQFT: 'Sq.Ft', GAJ: 'Gaj (Sq.Yd)', SQM: 'Sq.M' };
+      const hintMap = {
+        SQFT: '1 Gaj (Sq.Yd) = 9 Sq.Ft',
+        GAJ: 'Entering Size in Gaj (1 Gaj = 9 Sq.Ft)',
+        SQM: 'Entering Size in Sq.M (1 Sq.M = 10.76 Sq.Ft)'
+      };
+
+      document.getElementById('area-input-suffix').innerText = suffixMap[unitKey];
+      document.getElementById('area-unit-hint').innerText = hintMap[unitKey];
+
+      triggerHaptic('light');
+      syncAreaSliderAndInput();
+      renderAll();
+    }
+
+    function syncAreaSliderAndInput() {
+      const factor = AREA_FACTORS[currentAreaUnit];
+      const convertedVal = currentAreaUnit === 'SQFT'
+        ? Math.round(baseSqFt)
+        : Number((baseSqFt / factor).toFixed(1));
+
+      const minVal = Math.max(10, Math.round(180 / factor));
+      const maxVal = Math.round(10800 / factor);
+
+      areaSizeSlider.min = minVal;
+      areaSizeSlider.max = maxVal;
+      areaSizeSlider.step = currentAreaUnit === 'SQFT' ? 10 : 1;
+      areaSizeSlider.value = Math.min(maxVal, Math.max(minVal, Math.round(convertedVal)));
+      areaSizeInput.value = convertedVal;
+    }
+
+    areaSizeSlider.addEventListener('input', (e) => {
+      const val = Number(e.target.value) || 1;
+      baseSqFt = Math.max(9, val * AREA_FACTORS[currentAreaUnit]);
+      areaSizeInput.value = val;
+      renderAll();
+    });
+
+    areaSizeInput.addEventListener('input', (e) => {
+      const raw = Number(e.target.value);
+      if (!raw || raw <= 0) return;
+      baseSqFt = Math.max(9, raw * AREA_FACTORS[currentAreaUnit]);
+      areaSizeSlider.value = Math.min(Number(areaSizeSlider.max), Math.max(Number(areaSizeSlider.min), Math.round(raw)));
+      renderAll();
+    });
+
+    // ==========================================
+    // PAYMENT PLAN & BUDGET HANDLERS
+    // ==========================================
     function applyPresetPlan(planKey) {
       currentPlan = planKey;
       highlightGroup('.plan-btn', 'data-plan', planKey);
@@ -581,28 +880,22 @@
       }
     }
 
-    function getUnitName() {
-      if (baseAED < 1100000) return "High-Cashflow Smart Studio";
-      if (baseAED < 2100000) return "Prime 1-BHK Residence (Waterfront / Canal)";
-      if (baseAED < 3800000) return "Luxury 2-BHK + Maid (Golden Visa Tier)";
-      return "Ultra-Prime Sky Villa / Penthouse";
-    }
-
     function getDiscountedBaseAED() {
       const discountPct = Math.max(0, Math.min(30, Number(document.getElementById('custom-discount').value) || 0));
       return baseAED * (1 - (discountPct / 100));
     }
 
+    // ==========================================
+    // MASTER RENDER ENGINE
+    // ==========================================
     function renderAll() {
       const effectiveAED = getDiscountedBaseAED();
       const discountSavingsAED = Math.max(0, baseAED - effectiveAED);
 
-      // Market rent and service charge are anchored to the underlying asset valuation (baseAED)
       const annualRent = baseAED * (currentYield / 100);
       const serviceCharge = baseAED * 0.011;
       const netRent = Math.max(0, annualRent - serviceCharge);
 
-      // Net yield reflects actual return against net acquisition cost (effectiveAED)
       const netYield = ((netRent / effectiveAED) * 100).toFixed(2);
       const fiveYearGrowth = Math.round(discountSavingsAED + (baseAED * 0.35) + (netRent * 5));
 
@@ -635,13 +928,29 @@
         `;
       }
 
-      document.getElementById('unit-match-val').innerText = getUnitName();
+      // Area & Rate Calculations (Sq.Ft, Gaj, Sq.M)
+      const sqftRounded = Math.round(baseSqFt);
+      const gajVal = (baseSqFt / 9).toFixed(1);
+      const sqmVal = (baseSqFt / 10.7639).toFixed(1);
+
+      document.getElementById('conv-sqft-val').innerText = `${sqftRounded.toLocaleString()} Sq.Ft`;
+      document.getElementById('conv-gaj-val').innerText = `${gajVal} Gaj (Sq.Yd)`;
+      document.getElementById('conv-sqm-val').innerText = `${sqmVal} Sq.M`;
+
+      const ratePerSqFtAED = effectiveAED / Math.max(1, baseSqFt);
+      const ratePerGajAED = ratePerSqFtAED * 9;
+
+      document.getElementById('rate-per-sqft').innerText = formatSelected(ratePerSqFtAED);
+      document.getElementById('rate-per-gaj').innerText = formatSelected(ratePerGajAED);
+
+      const layoutText = document.getElementById('spec-layout').value;
+      document.getElementById('unit-match-val').innerText = `${currentUnitType} (${sqftRounded} Sq.Ft / ${gajVal} Gaj • ${layoutText})`;
+
       renderPaymentSchedule();
 
-      // Auto-refresh memo if already open
       const previewBox = document.getElementById('memo-output-box');
       if (!previewBox.classList.contains('hidden')) {
-        generateMemo(false);
+        document.getElementById('memo-text-preview').innerText = buildMemoString();
       }
     }
 
@@ -699,6 +1008,18 @@
       const handoverPct = Number(document.getElementById('handover-pct-input').value) || 0;
       const dldPct = Number(document.getElementById('dld-waiver-select').value);
 
+      // Property & Plot Specs
+      const sqftRounded = Math.round(baseSqFt);
+      const gajVal = (baseSqFt / 9).toFixed(1);
+      const sqmVal = (baseSqFt / 10.7639).toFixed(1);
+      const ratePerSqFtAED = effectiveAED / Math.max(1, baseSqFt);
+      const ratePerGajAED = ratePerSqFtAED * 9;
+
+      const layoutText = document.getElementById('spec-layout').value;
+      const viewText = document.getElementById('spec-view').value;
+      const furnishText = document.getElementById('spec-furnishing').value;
+      const handoverDateText = document.getElementById('spec-handover').value;
+
       return `🏛️ YIELDEX CAPITAL ALLOCATION MEMORANDUM
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 🏢 Issuing Desk: ${agency}
@@ -711,10 +1032,18 @@
 ─────────────────────────────
 • Developer Brand: ${currentDeveloper}
 • Target Prime Location: ${currentArea}, Dubai UAE
-• Allocation Tier: ${getUnitName()}
 • Market Valuation: ${formatBoth(baseAED)}
 ${discountPct > 0 ? `• Institutional Discount: ${discountPct}% OFF (-${formatBoth(discountSavingsAED)})\n• Net Acquisition Price: ${formatBoth(effectiveAED)}` : `• Net Acquisition Price: ${formatBoth(effectiveAED)}`}
 • Settlement Currency: ${currentCurrency}
+
+🏠 PROPERTY & PLOT SPECIFICATIONS
+─────────────────────────────
+• Residence / Asset Type: ${currentUnitType} (${layoutText})
+• Total Built-Up / Plot Area: ${sqftRounded.toLocaleString()} Sq.Ft | ${gajVal} Gaj (Sq.Yd) | ${sqmVal} Sq.M
+• Valuation Rate: ${formatSelected(ratePerSqFtAED)}/Sq.Ft (${formatSelected(ratePerGajAED)}/Gaj)
+• Primary View / Facing: ${viewText}
+• Furnishing & Parking: ${furnishText}
+• Scheduled Handover: ${handoverDateText}
 
 📊 INSTITUTIONAL YIELD BENCHMARK
 ─────────────────────────────
@@ -754,6 +1083,8 @@ Confidential Term Sheet — For Investor Review Only.`;
         setTimeout(() => {
           previewBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }, 100);
+        // Trigger Monetag Rewarded Interstitial Ad
+        triggerRewardedInterstitial();
       }
     }
 
@@ -761,6 +1092,8 @@ Confidential Term Sheet — For Investor Review Only.`;
       const text = document.getElementById('memo-text-preview').innerText;
       triggerHaptic('success');
       copyTextSafe(text, "✓ Memo Copied to Clipboard!");
+      // Trigger Monetag Rewarded Popup Ad
+      triggerRewardedPopup();
     }
 
     function shareViaWhatsApp() {
@@ -773,8 +1106,10 @@ Confidential Term Sheet — For Investor Review Only.`;
     function contactVIPDesk() {
       const effectiveAED = getDiscountedBaseAED();
       const client = document.getElementById('client-name').value.trim() || "Investor";
+      const sqftRounded = Math.round(baseSqFt);
+      const gajVal = (baseSqFt / 9).toFixed(1);
       triggerHaptic('medium');
-      const text = `Hi YIELDEX Institutional Desk, I generated an allocation memo for *${currentDeveloper}* in *${currentArea}* at *${formatBoth(effectiveAED)}* (Client: ${client}). Please share available unit inventory and booking details.`;
+      const text = `Hi YIELDEX Institutional Desk, I generated an allocation memo for *${currentDeveloper}* (${currentUnitType} — ${sqftRounded} Sq.Ft / ${gajVal} Gaj) in *${currentArea}* at *${formatBoth(effectiveAED)}* (Client: ${client}). Please share available unit inventory and booking details.`;
       const directUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
       openSafeLink(directUrl);
     }
@@ -785,8 +1120,12 @@ Confidential Term Sheet — For Investor Review Only.`;
       document.getElementById('client-name').value = "Institutional Client";
       document.getElementById('custom-discount').value = 0;
       document.getElementById('dld-waiver-select').value = "4";
+      document.getElementById('spec-view').selectedIndex = 0;
+      document.getElementById('spec-furnishing').selectedIndex = 0;
+      document.getElementById('spec-handover').selectedIndex = 1;
       document.getElementById('memo-output-box').classList.add('hidden');
 
+      setAreaUnit('SQFT');
       setCurrency('USD');
       selectDeveloper('Binghatti');
       triggerHaptic('warning');
@@ -796,6 +1135,7 @@ Confidential Term Sheet — For Investor Review Only.`;
 
     // Initial Boot
     syncSliderAndInput();
+    syncAreaSliderAndInput();
     renderAll();
   </script>
 </body>
