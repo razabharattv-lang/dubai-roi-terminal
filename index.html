@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Dubai Capital Terminal — US / UK / UAE Desk</title>
+  <title>Dubai Capital Terminal — Institutional Deal Desk</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -25,7 +25,6 @@
       border-radius: 16px;
       box-shadow: inset 3px 3px 6px #cbd5e1, inset -3px -3px 6px #ffffff;
     }
-    /* Dynamic Active / Inactive Button States */
     .btn-active {
       background-color: #2563EB !important;
       color: #FFFFFF !important;
@@ -37,12 +36,12 @@
       color: #334155 !important;
       box-shadow: 3px 3px 8px #cbd5e1, -3px -3px 8px #ffffff !important;
     }
-    .clay-btn-gold {
-      background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+    .clay-btn-blue {
+      background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
       box-shadow: 6px 6px 14px #cbd5e1, -6px -6px 14px #ffffff, inset 1px 1px 2px rgba(255,255,255,0.4);
       color: #FFFFFF;
     }
-    .clay-btn-gold:active {
+    .clay-btn-blue:active {
       box-shadow: inset 3px 3px 6px rgba(0,0,0,0.3);
       transform: translateY(1px);
     }
@@ -52,12 +51,13 @@
       border: 1px solid #e2e8f0;
       outline: none;
     }
+    .clay-input:focus { border-color: #2563EB; }
     input[type=range] { accent-color: #2563EB; }
   </style>
 </head>
 <body class="min-h-screen pb-36 px-4 pt-3 max-w-lg mx-auto">
 
-  <!-- Header Bar -->
+  <!-- Header -->
   <header class="flex items-center justify-between py-2 mb-3">
     <div class="flex items-center gap-3">
       <div class="w-11 h-11 clay-surface rounded-2xl flex items-center justify-center text-xl">
@@ -65,7 +65,7 @@
       </div>
       <div>
         <h1 class="text-sm font-extrabold text-slate-900 tracking-tight leading-none">DUBAI CAPITAL</h1>
-        <span class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">US • UK • EU • UAE Institutional Desk</span>
+        <span class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Institutional Memo Generator</span>
       </div>
     </div>
     
@@ -76,13 +76,13 @@
     </div>
   </header>
 
-  <!-- Global Currency Selector -->
+  <!-- Currency Switcher -->
   <section class="clay-surface p-2.5 mb-4">
     <div class="flex items-center justify-between text-xs font-bold px-1 mb-1.5">
-      <span class="text-[10px] font-extrabold uppercase tracking-wide text-slate-500">Global Settlement Currency</span>
+      <span class="text-[10px] font-extrabold uppercase tracking-wide text-slate-500">Settlement Currency</span>
       <span id="rate-badge" class="text-[10px] text-blue-600 font-semibold">1 USD = 3.6725 AED (Pegged)</span>
     </div>
-    <div class="grid grid-cols-4 gap-1.5" id="currency-group">
+    <div class="grid grid-cols-4 gap-1.5">
       <button onclick="setCurrency('USD')" class="curr-btn py-2 rounded-xl text-center text-xs font-bold transition btn-active" data-curr="USD">
         🇺🇸 USD ($)
       </button>
@@ -98,14 +98,38 @@
     </div>
   </section>
 
-  <!-- 1. Master Developer Selection -->
+  <!-- Memo Agency / Broker Branding Section -->
+  <section class="clay-surface p-4 mb-4">
+    <div class="flex justify-between items-center mb-2.5">
+      <span class="text-xs font-extrabold uppercase tracking-wide text-slate-800">Agency & Client Details</span>
+      <span class="text-[10px] text-blue-600 font-bold">Included in Memo</span>
+    </div>
+    <div class="space-y-2 text-xs">
+      <div>
+        <label class="text-[10px] font-bold text-slate-500 uppercase">Agency / Brokerage Firm</label>
+        <input type="text" id="agency-name" value="Apex Luxury Real Estate Dubai" class="clay-input w-full px-3 py-2 rounded-xl font-bold text-slate-800 mt-0.5">
+      </div>
+      <div class="grid grid-cols-2 gap-2">
+        <div>
+          <label class="text-[10px] font-bold text-slate-500 uppercase">Advisor Name</label>
+          <input type="text" id="advisor-name" value="Private Client Desk" class="clay-input w-full px-3 py-2 rounded-xl font-bold text-slate-800 mt-0.5">
+        </div>
+        <div>
+          <label class="text-[10px] font-bold text-slate-500 uppercase">Client / Investor</label>
+          <input type="text" id="client-name" value="Valued Investor" class="clay-input w-full px-3 py-2 rounded-xl font-bold text-slate-800 mt-0.5">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 1. Developer Selection -->
   <section class="clay-surface p-4 mb-4">
     <div class="flex justify-between items-center mb-2.5">
       <span class="text-xs font-extrabold uppercase tracking-wide text-slate-800">1. Developer Brand & Inventory</span>
       <span id="dev-tag" class="text-[10px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full">Fast-Track Delivery</span>
     </div>
     
-    <div class="grid grid-cols-3 gap-2 text-xs font-bold mb-3" id="dev-group">
+    <div class="grid grid-cols-3 gap-2 text-xs font-bold mb-3">
       <button onclick="selectDeveloper('Binghatti')" class="dev-btn p-2 rounded-xl text-center transition btn-active" data-dev="Binghatti">
         ⚡ Binghatti
       </button>
@@ -157,13 +181,13 @@
     </div>
   </section>
 
-  <!-- 3. Target Prime Location -->
+  <!-- 3. Target Location -->
   <section class="mb-4">
     <div class="flex justify-between items-center mb-2 px-1">
       <span class="text-xs font-extrabold uppercase tracking-wide text-slate-700">2. Prime Location</span>
       <span id="selected-loc-label" class="text-[10px] text-blue-600 font-bold">Business Bay</span>
     </div>
-    <div class="flex gap-2 overflow-x-auto pb-1 no-scrollbar text-xs" id="area-group">
+    <div class="flex gap-2 overflow-x-auto pb-1 no-scrollbar text-xs">
       <button onclick="selectArea('Business Bay')" class="area-btn px-3.5 py-2 rounded-2xl font-bold whitespace-nowrap transition btn-active" data-area="Business Bay">Business Bay</button>
       <button onclick="selectArea('Downtown Dubai')" class="area-btn px-3.5 py-2 rounded-2xl font-bold whitespace-nowrap transition btn-inactive" data-area="Downtown Dubai">Downtown</button>
       <button onclick="selectArea('Dubai Marina')" class="area-btn px-3.5 py-2 rounded-2xl font-bold whitespace-nowrap transition btn-inactive" data-area="Dubai Marina">Dubai Marina</button>
@@ -173,7 +197,7 @@
     </div>
   </section>
 
-  <!-- 4. Budget Entry (Slider & Input) -->
+  <!-- 4. Acquisition Budget -->
   <section class="clay-surface p-5 mb-4">
     <div class="flex justify-between items-center mb-2">
       <span class="text-xs font-extrabold uppercase tracking-wide text-slate-700">3. Acquisition Budget</span>
@@ -209,40 +233,78 @@
     </div>
   </section>
 
-  <!-- 5. Payment Schedule -->
+  <!-- 5. Fully Customizable Payment Plan & Incentives -->
   <section class="clay-surface p-5 mb-4">
     <div class="flex justify-between items-center mb-3">
-      <span class="text-xs font-extrabold uppercase tracking-wide text-slate-700">4. Payment Structure</span>
-      <span class="text-[10px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full font-bold">Law No. 8 Escrow Protected</span>
+      <span class="text-xs font-extrabold uppercase tracking-wide text-slate-700">4. Payment Structure & Discounts</span>
+      <span class="text-[10px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full font-bold">Custom Editable</span>
     </div>
 
-    <div class="grid grid-cols-3 gap-1.5 p-1 clay-inset rounded-2xl mb-4 text-[11px] font-bold" id="plan-group">
-      <button onclick="selectPlan('1pct')" class="plan-btn py-2 rounded-xl transition btn-active" data-plan="1pct">1% Monthly</button>
-      <button onclick="selectPlan('milestone')" class="plan-btn py-2 rounded-xl transition btn-inactive" data-plan="milestone">60/40 Plan</button>
-      <button onclick="selectPlan('phpp')" class="plan-btn py-2 rounded-xl transition btn-inactive" data-plan="phpp">Post-Handover</button>
+    <!-- Plan Templates -->
+    <div class="grid grid-cols-3 gap-1.5 p-1 clay-inset rounded-2xl mb-4 text-[11px] font-bold">
+      <button onclick="applyPresetPlan('1pct')" class="plan-btn py-2 rounded-xl transition btn-active" data-plan="1pct">1% Monthly</button>
+      <button onclick="applyPresetPlan('milestone')" class="plan-btn py-2 rounded-xl transition btn-inactive" data-plan="milestone">60/40 Plan</button>
+      <button onclick="applyPresetPlan('phpp')" class="plan-btn py-2 rounded-xl transition btn-inactive" data-plan="phpp">Post-Handover</button>
     </div>
 
+    <!-- Custom Editable Inputs: Discount & DLD Waiver -->
+    <div class="grid grid-cols-2 gap-2.5 mb-3 text-xs">
+      <div class="clay-inset p-2.5">
+        <label class="text-[10px] font-bold text-slate-500 uppercase">Special Discount (%)</label>
+        <div class="flex items-center gap-1 mt-1">
+          <input type="number" id="custom-discount" value="0" min="0" max="15" step="0.5" oninput="renderAll()" class="w-14 bg-white border border-slate-200 rounded-lg px-2 py-1 font-extrabold text-blue-600 outline-none">
+          <span class="text-xs font-bold text-slate-400">% Off</span>
+        </div>
+      </div>
+      <div class="clay-inset p-2.5">
+        <label class="text-[10px] font-bold text-slate-500 uppercase">Govt DLD Fee</label>
+        <select id="dld-waiver-select" onchange="renderAll()" class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1 font-bold text-slate-700 text-xs mt-1 outline-none">
+          <option value="4">Standard 4%</option>
+          <option value="2">50% Waiver (2%)</option>
+          <option value="0">100% Free DLD (0%)</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Editable Milestone Percentages -->
+    <div class="grid grid-cols-3 gap-2 mb-4 text-[11px]">
+      <div class="clay-inset p-2 text-center">
+        <span class="text-[9px] font-bold text-slate-400 uppercase">Down Pay %</span>
+        <input type="number" id="dp-pct-input" value="20" min="5" max="50" oninput="renderAll()" class="w-full text-center bg-white border border-slate-200 rounded-lg py-1 font-extrabold text-slate-800 mt-1 outline-none">
+      </div>
+      <div class="clay-inset p-2 text-center">
+        <span class="text-[9px] font-bold text-slate-400 uppercase">During Build %</span>
+        <input type="number" id="during-pct-input" value="40" min="10" max="80" oninput="renderAll()" class="w-full text-center bg-white border border-slate-200 rounded-lg py-1 font-extrabold text-slate-800 mt-1 outline-none">
+      </div>
+      <div class="clay-inset p-2 text-center">
+        <span class="text-[9px] font-bold text-slate-400 uppercase">Handover %</span>
+        <input type="number" id="handover-pct-input" value="40" min="10" max="80" oninput="renderAll()" class="w-full text-center bg-white border border-slate-200 rounded-lg py-1 font-extrabold text-slate-800 mt-1 outline-none">
+      </div>
+    </div>
+
+    <!-- Dynamic Live Breakdown -->
     <div class="space-y-2 text-xs" id="schedule-container"></div>
   </section>
 
-  <!-- 6. Instant Actions -->
-  <section class="space-y-2.5 mb-4">
-    <button onclick="copyExecutiveMemo()" class="clay-surface w-full py-4 px-3 rounded-2xl text-xs font-extrabold text-blue-700 flex items-center justify-center gap-2 active:scale-95 transition border border-blue-200 bg-blue-50/50">
-      <span>📑 Copy Institutional Client Memo</span>
-    </button>
-  </section>
+  <!-- Memo Preview & Result Modal (Hidden by Default) -->
+  <div id="memo-output-box" class="clay-surface p-4 mb-5 hidden border-2 border-blue-500">
+    <div class="flex items-center justify-between mb-2">
+      <span class="text-xs font-extrabold text-blue-700 uppercase">✓ Generated Institutional Memo</span>
+      <button onclick="copyGeneratedMemo()" class="text-[11px] font-bold bg-blue-600 text-white px-3 py-1 rounded-lg">Copy Memo</button>
+    </div>
+    <pre id="memo-text-preview" class="text-[10px] bg-slate-900 text-emerald-400 p-3 rounded-xl overflow-x-auto whitespace-pre-wrap font-mono"></pre>
+  </div>
 
-  <!-- Sticky Bottom Action Bar -->
+  <!-- Sticky Bottom Bar: GENERATE MEMO -->
   <div class="fixed bottom-0 left-0 right-0 p-3.5 bg-white/90 backdrop-blur-md border-t border-slate-200 z-50">
     <div class="max-w-lg mx-auto" id="cta-container">
-      <button onclick="submitRequest()" class="clay-btn-gold w-full py-4 px-4 font-extrabold text-sm rounded-2xl flex items-center justify-center gap-2">
-        <span>⚡ Request Verified Allocation & Dossier</span>
+      <button onclick="generateMemo()" class="clay-btn-blue w-full py-4 px-4 font-extrabold text-base rounded-2xl flex items-center justify-center gap-2">
+        <span>⚡ Generate Memo</span>
       </button>
     </div>
   </div>
 
   <script>
-    // Safe Telegram WebApp initialization
     try {
       if (window.Telegram?.WebApp) {
         window.Telegram.WebApp.ready();
@@ -253,7 +315,7 @@
     function triggerHaptic(type = 'light') {
       try {
         if (window.Telegram?.WebApp?.HapticFeedback) {
-          if (type === 'success' || type === 'warning' || type === 'error') {
+          if (type === 'success' || type === 'warning') {
             window.Telegram.WebApp.HapticFeedback.notificationOccurred(type);
           } else {
             window.Telegram.WebApp.HapticFeedback.impactOccurred(type);
@@ -262,22 +324,9 @@
       } catch(e) {}
     }
 
-    // Currency Rates (Relative to 1 AED)
-    const RATES = {
-      AED: 1.0,
-      USD: 0.2723,
-      GBP: 0.2105,
-      EUR: 0.2469
-    };
+    const RATES = { AED: 1.0, USD: 0.2723, GBP: 0.2105, EUR: 0.2469 };
+    const SYMBOLS = { AED: 'AED ', USD: '$', GBP: '£', EUR: '€' };
 
-    const SYMBOLS = {
-      AED: 'AED ',
-      USD: '$',
-      GBP: '£',
-      EUR: '€'
-    };
-
-    // Developer Master Profiles
     const DEVELOPERS = {
       'Binghatti': { priceAED: 1150000, area: 'Business Bay', yield: 8.8, plan: '1pct', tag: 'Fast-Track Delivery', focus: '1% Monthly Cashflow Strategy' },
       'Emaar': { priceAED: 2500000, area: 'Downtown Dubai', yield: 7.2, plan: 'milestone', tag: 'Global Tier-1 / Sovereign', focus: 'Highest Capital Growth & Iconic Landmarks' },
@@ -287,7 +336,6 @@
       'Sky Villa': { priceAED: 4500000, area: 'Palm Jumeirah', yield: 6.9, plan: 'phpp', tag: 'Ultra-Prime Trophy Assets', focus: 'Private Waterfront Sky Villas' }
     };
 
-    // Location Benchmarks
     const LOCATIONS = {
       'Business Bay': { priceAED: 1500000, yield: 8.8 },
       'Downtown Dubai': { priceAED: 2600000, yield: 7.2 },
@@ -297,7 +345,6 @@
       'Palm Jumeirah': { priceAED: 4500000, yield: 6.9 }
     };
 
-    // App State
     let currentCurrency = 'USD';
     let currentDeveloper = 'Binghatti';
     let currentArea = 'Business Bay';
@@ -308,7 +355,6 @@
     const priceInput = document.getElementById('price-input');
     const priceSlider = document.getElementById('price-slider');
 
-    // UI Highlight Helper
     function highlightGroup(selector, activeAttr, activeVal) {
       document.querySelectorAll(selector).forEach(btn => {
         if (btn.getAttribute(activeAttr) === activeVal) {
@@ -321,7 +367,6 @@
       });
     }
 
-    // 1. Currency Switcher
     function setCurrency(curr) {
       currentCurrency = curr;
       highlightGroup('.curr-btn', 'data-curr', curr);
@@ -338,7 +383,6 @@
       renderAll();
     }
 
-    // 2. Developer Switcher
     function selectDeveloper(devName) {
       currentDeveloper = devName;
       const data = DEVELOPERS[devName];
@@ -349,7 +393,7 @@
 
       highlightGroup('.dev-btn', 'data-dev', devName);
       highlightGroup('.area-btn', 'data-area', currentArea);
-      highlightGroup('.plan-btn', 'data-plan', currentPlan);
+      applyPresetPlan(currentPlan);
 
       document.getElementById('dev-tag').innerText = data.tag;
       document.getElementById('dev-focus-text').innerText = data.focus;
@@ -360,7 +404,6 @@
       renderAll();
     }
 
-    // 3. Location Switcher
     function selectArea(areaName) {
       currentArea = areaName;
       const loc = LOCATIONS[areaName];
@@ -375,15 +418,28 @@
       renderAll();
     }
 
-    // 4. Plan Switcher
-    function selectPlan(planKey) {
+    function applyPresetPlan(planKey) {
       currentPlan = planKey;
       highlightGroup('.plan-btn', 'data-plan', planKey);
+
+      if (planKey === '1pct') {
+        document.getElementById('dp-pct-input').value = 20;
+        document.getElementById('during-pct-input').value = 40;
+        document.getElementById('handover-pct-input').value = 40;
+      } else if (planKey === 'milestone') {
+        document.getElementById('dp-pct-input').value = 20;
+        document.getElementById('during-pct-input').value = 40;
+        document.getElementById('handover-pct-input').value = 40;
+      } else {
+        document.getElementById('dp-pct-input').value = 20;
+        document.getElementById('during-pct-input').value = 30;
+        document.getElementById('handover-pct-input').value = 50;
+      }
+
       triggerHaptic('light');
       renderAll();
     }
 
-    // Slider & Input Sync
     function syncSliderAndInput() {
       const convPrice = Math.round(baseAED * RATES[currentCurrency]);
       priceInput.value = convPrice;
@@ -433,27 +489,32 @@
       return "Ultra-Prime Sky Villa / Penthouse";
     }
 
+    function getDiscountedBaseAED() {
+      const discountPct = Number(document.getElementById('custom-discount').value) || 0;
+      return baseAED * (1 - (discountPct / 100));
+    }
+
     function renderAll() {
-      const annualRent = baseAED * (currentYield / 100);
-      const serviceCharge = baseAED * 0.011;
+      const effectiveAED = getDiscountedBaseAED();
+      const annualRent = effectiveAED * (currentYield / 100);
+      const serviceCharge = effectiveAED * 0.011;
       const netRent = Math.max(0, annualRent - serviceCharge);
-      const netYield = ((netRent / baseAED) * 100).toFixed(2);
-      const fiveYearGrowth = Math.round((baseAED * 0.35) + (netRent * 5));
+      const netYield = ((netRent / effectiveAED) * 100).toFixed(2);
+      const fiveYearGrowth = Math.round((effectiveAED * 0.35) + (netRent * 5));
 
       document.getElementById('roi-val').innerText = netYield + '%';
       document.getElementById('net-rent-val').innerText = formatSelected(netRent);
       document.getElementById('total-growth-val').innerText = '+' + formatSelected(fiveYearGrowth);
 
-      // Golden Visa Badge
       const gvBox = document.getElementById('golden-visa-tag');
-      if (baseAED >= 2000000) {
+      if (effectiveAED >= 2000000) {
         gvBox.innerHTML = `
           <span class="text-[10px] font-extrabold bg-amber-100 text-amber-900 border border-amber-300 px-2.5 py-1 rounded-xl inline-flex items-center gap-1">
             ⭐ 10-Yr Golden Visa
           </span>
         `;
       } else {
-        const diff = 2000000 - baseAED;
+        const diff = 2000000 - effectiveAED;
         gvBox.innerHTML = `
           <span class="text-[10px] font-semibold text-slate-400">
             ${formatSelected(diff)} to Golden Visa
@@ -467,154 +528,128 @@
 
     function renderPaymentSchedule() {
       const container = document.getElementById('schedule-container');
-      const dldFee = baseAED * 0.04;
+      const effectiveAED = getDiscountedBaseAED();
 
-      if (currentPlan === '1pct') {
-        const dp = baseAED * 0.20;
-        const monthly = baseAED * 0.01;
-        const handover = baseAED * 0.40;
+      const dpPct = Number(document.getElementById('dp-pct-input').value) || 20;
+      const duringPct = Number(document.getElementById('during-pct-input').value) || 40;
+      const handoverPct = Number(document.getElementById('handover-pct-input').value) || 40;
+      const dldPct = Number(document.getElementById('dld-waiver-select').value) || 0;
 
-        container.innerHTML = `
-          <div class="flex justify-between items-center p-2.5 rounded-xl bg-slate-50 border border-slate-100">
-            <div><span class="font-bold text-slate-800">Booking Down Payment (20%)</span><p class="text-[10px] text-slate-400">Secures SPA & inventory allocation</p></div>
-            <span class="font-extrabold text-slate-900">${formatSelected(dp)}</span>
-          </div>
-          <div class="flex justify-between items-center p-2.5 rounded-xl bg-blue-50/70 border border-blue-100">
-            <div><span class="font-bold text-blue-900">Monthly Cashflow (1%)</span><p class="text-[10px] text-blue-600">Per month (40 Months duration)</p></div>
-            <span class="font-extrabold text-blue-700">${formatSelected(monthly)}/mo</span>
-          </div>
-          <div class="flex justify-between items-center p-2.5 rounded-xl bg-slate-50 border border-slate-100">
-            <div><span class="font-bold text-slate-800">Key Handover Completion (40%)</span><p class="text-[10px] text-slate-400">Mortgageable on physical delivery</p></div>
-            <span class="font-extrabold text-slate-900">${formatSelected(handover)}</span>
-          </div>
-          <div class="flex justify-between items-center p-2.5 rounded-xl bg-slate-50 border border-slate-100">
-            <div><span class="font-bold text-slate-800">Govt DLD Registration (4%)</span><p class="text-[10px] text-slate-400">Dubai Land Department Title fee</p></div>
-            <span class="font-extrabold text-slate-600">${formatSelected(dldFee)}</span>
-          </div>
-        `;
-      } else if (currentPlan === 'milestone') {
-        const dp = baseAED * 0.20;
-        const duringBuild = baseAED * 0.40;
-        const handover = baseAED * 0.40;
+      const dpAmount = effectiveAED * (dpPct / 100);
+      const duringAmount = effectiveAED * (duringPct / 100);
+      const handoverAmount = effectiveAED * (handoverPct / 100);
+      const dldAmount = effectiveAED * (dldPct / 100);
 
-        container.innerHTML = `
-          <div class="flex justify-between items-center p-2.5 rounded-xl bg-slate-50 border border-slate-100">
-            <div><span class="font-bold text-slate-800">Reservation & Down Payment (20%)</span><p class="text-[10px] text-slate-400">Booking deposit & registration</p></div>
-            <span class="font-extrabold text-slate-900">${formatSelected(dp)}</span>
-          </div>
-          <div class="flex justify-between items-center p-2.5 rounded-xl bg-blue-50/70 border border-blue-100">
-            <div><span class="font-bold text-blue-900">Construction Milestones (40%)</span><p class="text-[10px] text-blue-600">Paid in stages linked to RERA audit</p></div>
-            <span class="font-extrabold text-blue-700">${formatSelected(duringBuild)}</span>
-          </div>
-          <div class="flex justify-between items-center p-2.5 rounded-xl bg-slate-50 border border-slate-100">
-            <div><span class="font-bold text-slate-800">Key Handover Completion (40%)</span><p class="text-[10px] text-slate-400">Final title handover</p></div>
-            <span class="font-extrabold text-slate-900">${formatSelected(handover)}</span>
-          </div>
-        `;
-      } else {
-        const dp = baseAED * 0.20;
-        const duringBuild = baseAED * 0.30;
-        const postHandover = baseAED * 0.50;
-
-        container.innerHTML = `
-          <div class="flex justify-between items-center p-2.5 rounded-xl bg-slate-50 border border-slate-100">
-            <div><span class="font-bold text-slate-800">Initial Down Payment (20%)</span><p class="text-[10px] text-slate-400">Inventory lock</p></div>
-            <span class="font-extrabold text-slate-900">${formatSelected(dp)}</span>
-          </div>
-          <div class="flex justify-between items-center p-2.5 rounded-xl bg-slate-50 border border-slate-100">
-            <div><span class="font-bold text-slate-800">During Construction (30%)</span><p class="text-[10px] text-slate-400">Progressive installments</p></div>
-            <span class="font-extrabold text-slate-900">${formatSelected(duringBuild)}</span>
-          </div>
-          <div class="flex justify-between items-center p-2.5 rounded-xl bg-emerald-50/70 border border-emerald-100">
-            <div><span class="font-bold text-emerald-900">Post-Handover Plan (50%)</span><p class="text-[10px] text-emerald-600">Funded via rental yield over 36 months</p></div>
-            <span class="font-extrabold text-emerald-700">${formatSelected(postHandover)}</span>
-          </div>
-        `;
-      }
+      container.innerHTML = `
+        <div class="flex justify-between items-center p-2.5 rounded-xl bg-slate-50 border border-slate-100">
+          <div><span class="font-bold text-slate-800">Down Payment (${dpPct}%)</span><p class="text-[10px] text-slate-400">Secures reservation & SPA</p></div>
+          <span class="font-extrabold text-slate-900">${formatSelected(dpAmount)}</span>
+        </div>
+        <div class="flex justify-between items-center p-2.5 rounded-xl bg-blue-50/70 border border-blue-100">
+          <div><span class="font-bold text-blue-900">${currentPlan === '1pct' ? 'Monthly Installments (1%)' : 'During Construction'} (${duringPct}%)</span><p class="text-[10px] text-blue-600">${currentPlan === '1pct' ? formatSelected(effectiveAED * 0.01) + '/mo' : 'Milestone Linked'}</p></div>
+          <span class="font-extrabold text-blue-700">${formatSelected(duringAmount)}</span>
+        </div>
+        <div class="flex justify-between items-center p-2.5 rounded-xl bg-slate-50 border border-slate-100">
+          <div><span class="font-bold text-slate-800">${currentPlan === 'phpp' ? 'Post-Handover 3-Yr' : 'On Key Handover'} (${handoverPct}%)</span><p class="text-[10px] text-slate-400">Mortgageable on physical delivery</p></div>
+          <span class="font-extrabold text-slate-900">${formatSelected(handoverAmount)}</span>
+        </div>
+        <div class="flex justify-between items-center p-2.5 rounded-xl bg-slate-50 border border-slate-100">
+          <div><span class="font-bold text-slate-800">Govt DLD Fee (${dldPct}%)</span><p class="text-[10px] text-slate-400">${dldPct === 0 ? '100% Developer Paid Waiver' : dldPct === 2 ? '50% DLD Waiver' : 'Standard Title Fee'}</p></div>
+          <span class="font-extrabold ${dldPct === 0 ? 'text-emerald-600' : 'text-slate-600'}">${dldPct === 0 ? 'FREE (Waiver)' : formatSelected(dldAmount)}</span>
+        </div>
+      `;
     }
 
-    function copyExecutiveMemo() {
-      const annualRent = baseAED * (currentYield / 100);
-      const serviceCharge = baseAED * 0.011;
+    // THE FINAL MEMO GENERATOR
+    function generateMemo() {
+      const effectiveAED = getDiscountedBaseAED();
+      const annualRent = effectiveAED * (currentYield / 100);
+      const serviceCharge = effectiveAED * 0.011;
       const netRent = Math.max(0, annualRent - serviceCharge);
-      const netYield = ((netRent / baseAED) * 100).toFixed(2);
-      const fiveYearGain = Math.round((baseAED * 0.35) + (netRent * 5));
-      const goldenVisaEligible = baseAED >= 2000000;
+      const netYield = ((netRent / effectiveAED) * 100).toFixed(2);
+      const fiveYearGain = Math.round((effectiveAED * 0.35) + (netRent * 5));
+      const goldenVisaEligible = effectiveAED >= 2000000;
 
-      let planDetails = "";
-      if (currentPlan === '1pct') {
-        planDetails = `• Down Payment (20%): ${formatBoth(baseAED * 0.20)}
-• Monthly Cashflow (1%): ${formatBoth(baseAED * 0.01)} / Month (40 Months)
-• Completion Handover (40%): ${formatBoth(baseAED * 0.40)}
-• Govt DLD Registration (4%): ${formatBoth(baseAED * 0.04)}`;
-      } else if (currentPlan === 'milestone') {
-        planDetails = `• Down Payment (20%): ${formatBoth(baseAED * 0.20)}
-• Construction Milestones (40%): ${formatBoth(baseAED * 0.40)}
-• Completion Handover (40%): ${formatBoth(baseAED * 0.40)}`;
-      } else {
-        planDetails = `• Down Payment (20%): ${formatBoth(baseAED * 0.20)}
-• During Construction (30%): ${formatBoth(baseAED * 0.30)}
-• Post-Handover 3-Yr Plan (50%): ${formatBoth(baseAED * 0.50)} (Funded by Rental Yield)`;
-      }
+      const agency = document.getElementById('agency-name').value || "Apex Luxury Real Estate Dubai";
+      const advisor = document.getElementById('advisor-name').value || "Private Wealth Desk";
+      const client = document.getElementById('client-name').value || "Valued Investor";
 
-      const memo = `🏛️ DUBAI OFF-PLAN CAPITAL ALLOCATION MEMORANDUM
+      const discountPct = Number(document.getElementById('custom-discount').value) || 0;
+      const dpPct = Number(document.getElementById('dp-pct-input').value) || 20;
+      const duringPct = Number(document.getElementById('during-pct-input').value) || 40;
+      const handoverPct = Number(document.getElementById('handover-pct-input').value) || 40;
+      const dldPct = Number(document.getElementById('dld-waiver-select').value) || 0;
+
+      const memo = `🏛️ DUBAI CAPITAL ALLOCATION MEMORANDUM
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🏢 Developer / Brand: ${currentDeveloper}
-📍 Target Location: ${currentArea}, Dubai UAE
-🔑 Recommended Asset: ${getUnitName()}
-💰 Total Acquisition: ${formatBoth(baseAED)}
-💱 Settlement Currency: ${currentCurrency}
+🏢 Issuing Agency: ${agency}
+👤 Senior Advisor: ${advisor}
+🎯 Prepared For: ${client}
+📅 Date: ${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-📊 FINANCIAL PERFORMANCE BENCHMARK
+📍 ASSET & DEVELOPER SPECIFICATION
 ─────────────────────────────
-• Expected Net Yield (ROI): ${netYield}% / Year (100% Tax-Free)
+• Developer Brand: ${currentDeveloper}
+• Target Prime Location: ${currentArea}, Dubai UAE
+• Asset Allocation: ${getUnitName()}
+• Original Price: ${formatBoth(baseAED)}
+${discountPct > 0 ? `• Exclusive Developer Incentive: ${discountPct}\% OFF (-${formatBoth(baseAED * (discountPct/100))})\n• Net Agreed Price: ${formatBoth(effectiveAED)}` : `• Net Agreed Price: ${formatBoth(effectiveAED)}`}
+• Settlement Currency: ${currentCurrency}
+
+📊 INSTITUTIONAL YIELD BENCHMARK
+─────────────────────────────
+• Expected Net Rental Yield: ${netYield}% / Year (100% Tax-Free)
 • Net Annual Rental Income: ${formatBoth(netRent)}
-• 5-Year Total Wealth Gain: +${formatBoth(fiveYearGain)}
-• UAE 10-Yr Golden Visa: ${goldenVisaEligible ? "✅ QUALIFIED (Full Family Residency Included)" : "❌ Need " + formatBoth(2000000 - baseAED) + " more"}
+• 5-Year Capital & Rent Growth: +${formatBoth(fiveYearGain)}
+• UAE 10-Yr Golden Visa: ${goldenVisaEligible ? "✅ ELIGIBLE (Direct Full Family Residency)" : "❌ Needs " + formatBoth(2000000 - effectiveAED) + " to qualify"}
 
-💳 PAYMENT SCHEDULE (${currentPlan === '1pct' ? '1% Monthly Plan' : currentPlan === 'milestone' ? '60/40 Plan' : 'Post-Handover Plan'})
+💳 CUSTOM PAYMENT SCHEDULE
 ─────────────────────────────
-${planDetails}
+• Down Payment (${dpPct}%): ${formatBoth(effectiveAED * (dpPct/100))}
+• During Construction (${duringPct}%): ${formatBoth(effectiveAED * (duringPct/100))} ${currentPlan === '1pct' ? '(1% Monthly Cashflow)' : ''}
+• Final Handover (${handoverPct}%): ${formatBoth(effectiveAED * (handoverPct/100))}
+• Dubai Land Dept (DLD ${dldPct}%): ${dldPct === 0 ? "100% WAIVED BY DEVELOPER (0 AED)" : formatBoth(effectiveAED * (dldPct/100))}
 
-🛡️ REGULATORY SAFEGUARDS & ADVANTAGES
+🛡️ LEGAL SAFEGUARDS & GOVERNANCE
 ─────────────────────────────
-1. Escrow Protection: Governed under Dubai Law No. 8 of 2007 (Funds held in Central Bank Escrow).
-2. Tax Advantage: 0% Capital Gains Tax, 0% Rental Income Tax.
-3. Currency Security: AED is officially pegged to USD (1 USD = 3.6725 AED).
-4. Cross-Border Settlement: Legal Wire Transfer (USD/GBP/EUR) & USDT / BTC escrow settlement supported.
+1. Escrow Protection: Funds held strictly in Central Bank Escrow (Dubai Law No. 8).
+2. Taxation: 0% Capital Gains, 0% Corporate, 0% Income Tax.
+3. Currency Security: AED pegged directly to USD (1 USD = 3.6725 AED).
+4. Settlement Modes: Wire Transfer (USD/GBP/EUR) & Legal Crypto (USDT/BTC) supported.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Generated via Dubai Capital Institutional Desk
-Private & Confidential — For Qualified Investor Review Only.`;
+Confidential Institutional Term Sheet — Prepared Exclusively for ${client}`;
 
+      // Show on-screen preview
+      const previewBox = document.getElementById('memo-output-box');
+      document.getElementById('memo-text-preview').innerText = memo;
+      previewBox.classList.remove('hidden');
+      previewBox.scrollIntoView({ behavior: 'smooth' });
+
+      // Automatically copy to clipboard
       navigator.clipboard.writeText(memo);
       triggerHaptic('success');
-      alert("Institutional Client Memorandum copied in " + currentCurrency + "!");
+      alert("✓ Official Memo Generated & Copied to Clipboard!");
+    }
+
+    function copyGeneratedMemo() {
+      const text = document.getElementById('memo-text-preview').innerText;
+      navigator.clipboard.writeText(text);
+      triggerHaptic('success');
+      alert("Memo re-copied to clipboard!");
     }
 
     function resetDefaults() {
       selectDeveloper('Binghatti');
       setCurrency('USD');
-      document.getElementById('cta-container').innerHTML = `
-        <button onclick="submitRequest()" class="clay-btn-gold w-full py-4 px-4 font-extrabold text-sm rounded-2xl flex items-center justify-center gap-2">
-          <span>⚡ Request Verified Allocation & Dossier</span>
-        </button>
-      `;
+      document.getElementById('custom-discount').value = 0;
+      document.getElementById('dld-waiver-select').value = 4;
+      document.getElementById('memo-output-box').classList.add('hidden');
       triggerHaptic('warning');
     }
 
-    function submitRequest() {
-      triggerHaptic('success');
-      document.getElementById('cta-container').innerHTML = `
-        <div class="clay-surface p-3.5 text-center border border-emerald-300">
-          <p class="text-xs font-extrabold text-emerald-700">✓ Allocation Request Logged (${currentCurrency})</p>
-          <p class="text-[10px] text-slate-500 mt-0.5">${currentDeveloper} matching dossier locked to your private session.</p>
-          <button onclick="resetDefaults()" class="mt-2 text-xs font-extrabold text-blue-600 underline">↺ Adjust / Select Another Developer</button>
-        </div>
-      `;
-    }
-
-    // Initialize defaults on page load
+    // Init
     syncSliderAndInput();
     renderAll();
   </script>
