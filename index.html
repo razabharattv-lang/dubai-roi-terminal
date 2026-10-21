@@ -2,88 +2,189 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>Dubai Off-Plan ROI Terminal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Dubai Off-Plan Capital Terminal</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    body { background-color: #0b0f19; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
-    input[type=range] { accent-color: #f59e0b; }
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: radial-gradient(circle at top, #151b28 0%, #080b11 100%);
+      color: #f1f5f9;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .gold-gradient-text {
+      background: linear-gradient(135deg, #FDE08B 0%, #D4AF37 50%, #AA771C 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .gold-btn {
+      background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%);
+      box-shadow: 0 4px 20px -2px rgba(234, 179, 8, 0.35);
+    }
+    .glass-card {
+      background: rgba(22, 27, 38, 0.7);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    input[type=range] {
+      accent-color: #eab308;
+    }
   </style>
 </head>
-<body class="text-slate-100 min-h-screen p-4 pb-10">
+<body class="min-h-screen pb-24 px-4 pt-3">
 
-  <!-- Header -->
-  <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
-    <div class="flex items-center gap-2">
-      <span class="text-xl">🏢</span>
-      <h1 class="font-bold text-base tracking-wide text-white">Dubai Yield Terminal</h1>
-    </div>
-    <span class="text-[11px] bg-amber-400/10 text-amber-400 border border-amber-400/20 px-2 py-0.5 rounded-full font-medium">Off-Plan 2026</span>
-  </div>
-
-  <p id="user-display" class="text-xs text-slate-400 mb-4">Investor: <span class="text-slate-200 font-medium">Private</span></p>
-
-  <!-- ROI Card -->
-  <div class="bg-gradient-to-br from-slate-900 to-slate-800/90 border border-slate-700/70 rounded-2xl p-4 mb-5 shadow-lg">
-    <p class="text-[11px] text-slate-400 uppercase tracking-wider mb-1">Expected Net Yield (ROI)</p>
-    <div class="flex items-baseline gap-2 mb-3">
-      <span id="roi-value" class="text-4xl font-extrabold text-amber-400">6.80%</span>
-      <span class="text-xs text-slate-400">p.a.</span>
-    </div>
-
-    <div class="grid grid-cols-2 gap-2 pt-3 border-t border-slate-700/50">
-      <div>
-        <p class="text-[11px] text-slate-400">Net Annual Rent</p>
-        <p id="net-rent-value" class="text-sm font-semibold text-white">AED 102,000</p>
-        <p id="usd-rent-value" class="text-[10px] text-slate-400">~$27,770 USD</p>
+  <!-- Top Status Bar -->
+  <div class="flex items-center justify-between py-2 border-b border-slate-800/80 mb-4">
+    <div class="flex items-center gap-2.5">
+      <div class="w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-base">
+        🏛️
       </div>
       <div>
-        <p class="text-[11px] text-slate-400">5-Yr Projected Gain</p>
-        <p id="gain-value" class="text-sm font-semibold text-emerald-400">+AED 1,035,000</p>
-        <p id="usd-gain-value" class="text-[10px] text-emerald-500/80">~+$281,800 USD</p>
+        <h1 class="text-sm font-bold tracking-wide text-white">DUBAI YIELD TERMINAL</h1>
+        <p class="text-[10px] text-slate-400 font-medium">Off-Plan Institutional Desk</p>
+      </div>
+    </div>
+    <div class="flex items-center gap-1.5 bg-slate-900 border border-slate-800 rounded-lg p-1 text-[11px]">
+      <button id="curr-aed" onclick="setCurrency('AED')" class="px-2 py-0.5 rounded font-bold bg-amber-500 text-slate-950 transition">AED</button>
+      <button id="curr-usd" onclick="setCurrency('USD')" class="px-2 py-0.5 rounded font-medium text-slate-400 transition">USD</button>
+    </div>
+  </div>
+
+  <!-- Prime Metrics Dashboard Card -->
+  <div class="glass-card rounded-2xl p-4 mb-4 relative overflow-hidden">
+    <div class="absolute -right-10 -top-10 w-32 h-32 bg-amber-500/10 rounded-full blur-2xl pointer-events-none"></div>
+
+    <div class="flex justify-between items-start mb-2">
+      <div>
+        <span class="text-[10px] uppercase tracking-widest text-slate-400 font-semibold">Projected Net Yield</span>
+        <div class="flex items-baseline gap-2 mt-0.5">
+          <span id="roi-value" class="text-4xl font-extrabold gold-gradient-text tracking-tight">7.20%</span>
+          <span class="text-xs text-emerald-400 font-semibold">Net / Year</span>
+        </div>
+      </div>
+      <span class="text-[10px] px-2 py-1 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold flex items-center gap-1">
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Tax-Free
+      </span>
+    </div>
+
+    <div class="grid grid-cols-2 gap-3 pt-3.5 mt-2 border-t border-slate-700/40">
+      <div>
+        <p class="text-[10px] text-slate-400 uppercase font-medium">Net Annual Rental</p>
+        <p id="net-rent-val" class="text-base font-bold text-white mt-0.5">AED 108,000</p>
+      </div>
+      <div>
+        <p class="text-[10px] text-slate-400 uppercase font-medium">5-Yr Total Return (Est.)</p>
+        <p id="total-gain-val" class="text-base font-bold text-emerald-400 mt-0.5">+AED 1,065,000</p>
       </div>
     </div>
   </div>
 
-  <!-- Sliders -->
-  <div class="space-y-4 mb-5">
-    <div>
-      <div class="flex justify-between text-xs mb-1">
-        <span class="text-slate-300">Property Price</span>
-        <span id="price-label" class="font-bold text-amber-400">1,500,000 AED (~$408k)</span>
-      </div>
-      <input type="range" id="price" min="600000" max="10000000" step="50000" value="1500000" class="w-full h-2 bg-slate-800 rounded-lg cursor-pointer">
-    </div>
-
-    <div>
-      <div class="flex justify-between text-xs mb-1">
-        <span class="text-slate-300">Expected Annual Rent</span>
-        <span id="rent-label" class="font-bold text-amber-400">120,000 AED</span>
-      </div>
-      <input type="range" id="rent" min="40000" max="800000" step="10000" value="120000" class="w-full h-2 bg-slate-800 rounded-lg cursor-pointer">
-    </div>
-
-    <div>
-      <div class="flex justify-between text-xs mb-1">
-        <span class="text-slate-300">Service Charges / Year</span>
-        <span id="service-label" class="font-bold text-slate-400">18,000 AED</span>
-      </div>
-      <input type="range" id="service" min="5000" max="100000" step="1000" value="18000" class="w-full h-2 bg-slate-800 rounded-lg cursor-pointer">
+  <!-- Area Pills Selector -->
+  <div class="mb-4">
+    <p class="text-[11px] text-slate-400 font-medium mb-2 uppercase tracking-wider">Select Investment Zone</p>
+    <div class="flex gap-2 overflow-x-auto pb-1 text-xs no-scrollbar">
+      <button onclick="setArea('Business Bay', 1500000, 120000, 16000)" class="area-btn whitespace-nowrap px-3.5 py-1.5 rounded-xl border border-amber-500/40 bg-amber-500/10 text-amber-300 font-medium">Business Bay</button>
+      <button onclick="setArea('Downtown', 2400000, 185000, 26000)" class="area-btn whitespace-nowrap px-3.5 py-1.5 rounded-xl border border-slate-800 bg-slate-900/80 text-slate-300 font-medium">Downtown</button>
+      <button onclick="setArea('Dubai Marina', 1800000, 145000, 20000)" class="area-btn whitespace-nowrap px-3.5 py-1.5 rounded-xl border border-slate-800 bg-slate-900/80 text-slate-300 font-medium">Dubai Marina</button>
+      <button onclick="setArea('JVC (High Yield)', 850000, 78000, 9500)" class="area-btn whitespace-nowrap px-3.5 py-1.5 rounded-xl border border-slate-800 bg-slate-900/80 text-slate-300 font-medium">JVC</button>
     </div>
   </div>
 
-  <!-- Privacy Badge -->
-  <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 mb-5 flex items-center gap-2.5">
-    <span class="text-emerald-400 text-base">🛡️</span>
-    <p class="text-[11px] text-slate-400 leading-snug">Zero-Spam Guarantee: No public phone number exposure. 100% confidential inquiry.</p>
+  <!-- Fine-Tune Sliders -->
+  <div class="glass-card rounded-2xl p-4 space-y-4 mb-4">
+    <div>
+      <div class="flex justify-between items-center text-xs mb-1.5">
+        <span class="text-slate-300 font-medium">Property Acquisition Price</span>
+        <span id="price-label" class="font-bold text-amber-400 text-sm">AED 1,500,000</span>
+      </div>
+      <input type="range" id="price" min="600000" max="8000000" step="50000" value="1500000" class="w-full h-2 bg-slate-800 rounded-lg cursor-pointer">
+    </div>
+
+    <div>
+      <div class="flex justify-between items-center text-xs mb-1.5">
+        <span class="text-slate-300 font-medium">Expected Annual Rental Income</span>
+        <span id="rent-label" class="font-bold text-white text-sm">AED 120,000</span>
+      </div>
+      <input type="range" id="rent" min="40000" max="650000" step="5000" value="120000" class="w-full h-2 bg-slate-800 rounded-lg cursor-pointer">
+    </div>
+
+    <div>
+      <div class="flex justify-between items-center text-xs mb-1.5">
+        <span class="text-slate-400 font-medium">Annual Service & Maintenance</span>
+        <span id="service-label" class="font-bold text-slate-400 text-xs">AED 16,000</span>
+      </div>
+      <input type="range" id="service" min="4000" max="60000" step="1000" value="16000" class="w-full h-2 bg-slate-800 rounded-lg cursor-pointer">
+    </div>
   </div>
 
-  <!-- Action CTA -->
-  <div id="cta-container">
-    <button id="submit-btn" class="w-full bg-amber-500 hover:bg-amber-600 active:scale-95 transition-all text-slate-950 font-bold py-3.5 px-4 rounded-xl text-sm shadow-lg shadow-amber-500/20">
-      Request Top 3 High-Yield Projects
-    </button>
+  <!-- Featured Curated Project Cards -->
+  <div class="mb-4">
+    <div class="flex justify-between items-center mb-2.5">
+      <h3 class="text-xs font-bold uppercase tracking-wider text-slate-300">Top Verified Opportunities</h3>
+      <span class="text-[10px] text-amber-400 font-medium">Q4 2026 Ready</span>
+    </div>
+
+    <div class="space-y-2.5">
+      <!-- Project 1 -->
+      <div class="glass-card p-3 rounded-xl flex items-center justify-between border-l-4 border-l-amber-500">
+        <div>
+          <div class="flex items-center gap-1.5">
+            <span class="text-xs font-bold text-white">Binghatti Skyrise</span>
+            <span class="text-[9px] px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 font-semibold">Business Bay</span>
+          </div>
+          <p class="text-[11px] text-slate-400 mt-0.5">From AED 1.2M • 1% Monthly Plan</p>
+        </div>
+        <div class="text-right">
+          <span class="text-xs font-extrabold text-emerald-400">8.4% ROI</span>
+          <p class="text-[9px] text-slate-400">Escrow Protected</p>
+        </div>
+      </div>
+
+      <!-- Project 2 -->
+      <div class="glass-card p-3 rounded-xl flex items-center justify-between border-l-4 border-l-cyan-500">
+        <div>
+          <div class="flex items-center gap-1.5">
+            <span class="text-xs font-bold text-white">Sobha Hartland II</span>
+            <span class="text-[9px] px-1.5 py-0.2 rounded bg-cyan-500/20 text-cyan-300 font-semibold">Lagoon Facing</span>
+          </div>
+          <p class="text-[11px] text-slate-400 mt-0.5">From AED 1.6M • Golden Visa Eligible</p>
+        </div>
+        <div class="text-right">
+          <span class="text-xs font-extrabold text-emerald-400">7.9% ROI</span>
+          <p class="text-[9px] text-slate-400">Waterfront</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Crypto & Privacy Badges -->
+  <div class="grid grid-cols-2 gap-2 mb-5">
+    <div class="glass-card p-2.5 rounded-xl flex items-center gap-2">
+      <span class="text-lg">💎</span>
+      <div>
+        <p class="text-[10px] font-bold text-white">USDT / BTC Friendly</p>
+        <p class="text-[9px] text-slate-400">Legal Crypto Invoicing</p>
+      </div>
+    </div>
+    <div class="glass-card p-2.5 rounded-xl flex items-center gap-2">
+      <span class="text-lg">🛡️</span>
+      <div>
+        <p class="text-[10px] font-bold text-white">100% Private Inquiry</p>
+        <p class="text-[9px] text-slate-400">No Broker Phone Spam</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sticky Bottom CTA Bar -->
+  <div class="fixed bottom-0 left-0 right-0 p-3 bg-slate-950/90 backdrop-blur-md border-t border-slate-800 z-50">
+    <div class="max-w-md mx-auto" id="cta-box">
+      <button onclick="requestDossier()" class="gold-btn w-full text-slate-950 font-extrabold py-3.5 px-4 rounded-xl text-sm flex items-center justify-center gap-2 transition-transform active:scale-98">
+        <span>⚡ Get Private Off-Plan Deck & Payment Plan</span>
+      </button>
+    </div>
   </div>
 
   <script>
@@ -91,53 +192,79 @@
     if (tg) {
       tg.ready();
       tg.expand();
-      if (tg.initDataUnsafe?.user) {
-        const u = tg.initDataUnsafe.user;
-        document.getElementById('user-display').innerHTML = `Investor: <span class="text-slate-200 font-medium">@${u.username || u.first_name}</span> (Verified)`;
-      }
     }
+
+    let currency = 'AED';
+    const AED_TO_USD = 0.2723;
 
     const priceEl = document.getElementById('price');
     const rentEl = document.getElementById('rent');
     const serviceEl = document.getElementById('service');
-    const AED_TO_USD = 0.2723;
+
+    function setCurrency(c) {
+      currency = c;
+      const aedBtn = document.getElementById('curr-aed');
+      const usdBtn = document.getElementById('curr-usd');
+
+      if (c === 'AED') {
+        aedBtn.className = "px-2 py-0.5 rounded font-bold bg-amber-500 text-slate-950 transition";
+        usdBtn.className = "px-2 py-0.5 rounded font-medium text-slate-400 transition";
+      } else {
+        usdBtn.className = "px-2 py-0.5 rounded font-bold bg-amber-500 text-slate-950 transition";
+        aedBtn.className = "px-2 py-0.5 rounded font-medium text-slate-400 transition";
+      }
+      calculate();
+    }
+
+    function setArea(name, p, r, s) {
+      priceEl.value = p;
+      rentEl.value = r;
+      serviceEl.value = s;
+      calculate();
+      if (tg?.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+    }
 
     function calculate() {
       const p = Number(priceEl.value);
       const r = Number(rentEl.value);
       const s = Number(serviceEl.value);
 
-      const pUSD = Math.round(p * AED_TO_USD / 1000) + 'k';
-      document.getElementById('price-label').innerText = `${p.toLocaleString()} AED (~$${pUSD})`;
-      document.getElementById('rent-label').innerText = `${r.toLocaleString()} AED`;
-      document.getElementById('service-label').innerText = `${s.toLocaleString()} AED`;
-
       const netRent = Math.max(0, r - s);
       const roi = ((netRent / p) * 100).toFixed(2);
       const gain = Math.round((p * 0.35) + (netRent * 5));
 
+      if (currency === 'AED') {
+        document.getElementById('price-label').innerText = 'AED ' + p.toLocaleString();
+        document.getElementById('rent-label').innerText = 'AED ' + r.toLocaleString();
+        document.getElementById('service-label').innerText = 'AED ' + s.toLocaleString();
+        document.getElementById('net-rent-val').innerText = 'AED ' + netRent.toLocaleString();
+        document.getElementById('total-gain-val').innerText = '+AED ' + gain.toLocaleString();
+      } else {
+        document.getElementById('price-label').innerText = '$' + Math.round(p * AED_TO_USD).toLocaleString();
+        document.getElementById('rent-label').innerText = '$' + Math.round(r * AED_TO_USD).toLocaleString();
+        document.getElementById('service-label').innerText = '$' + Math.round(s * AED_TO_USD).toLocaleString();
+        document.getElementById('net-rent-val').innerText = '$' + Math.round(netRent * AED_TO_USD).toLocaleString();
+        document.getElementById('total-gain-val').innerText = '+$' + Math.round(gain * AED_TO_USD).toLocaleString();
+      }
+
       document.getElementById('roi-value').innerText = roi + '%';
-      document.getElementById('net-rent-value').innerText = 'AED ' + netRent.toLocaleString();
-      document.getElementById('usd-rent-value').innerText = `~$${Math.round(netRent * AED_TO_USD).toLocaleString()} USD`;
-      document.getElementById('gain-value').innerText = '+AED ' + gain.toLocaleString();
-      document.getElementById('usd-gain-value').innerText = `~+$${Math.round(gain * AED_TO_USD).toLocaleString()} USD`;
     }
 
     priceEl.addEventListener('input', calculate);
     rentEl.addEventListener('input', calculate);
     serviceEl.addEventListener('input', calculate);
 
-    document.getElementById('submit-btn').addEventListener('click', () => {
-      if (tg?.HapticFeedback) {
-        tg.HapticFeedback.notificationOccurred('success');
-      }
-      document.getElementById('cta-container').innerHTML = `
-        <div class="bg-emerald-950/40 border border-emerald-500/30 rounded-xl p-3 text-center">
-          <p class="text-xs font-semibold text-emerald-400">Inquiry Received</p>
-          <p class="text-[11px] text-slate-400 mt-1">Our desk will dispatch the private off-plan deck directly to your Telegram chat.</p>
+    function requestDossier() {
+      if (tg?.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+      document.getElementById('cta-box').innerHTML = `
+        <div class="bg-emerald-950/60 border border-emerald-500/40 rounded-xl p-3 text-center">
+          <p class="text-xs font-bold text-emerald-400">✓ Confidential Request Logged</p>
+          <p class="text-[10px] text-slate-300 mt-0.5">Matching payment plans will be sent to your Telegram shortly.</p>
         </div>
       `;
-    });
+    }
+
+    calculate();
   </script>
 </body>
 </html>
